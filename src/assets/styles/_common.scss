@@ -1,0 +1,37 @@
+body{ 
+	font-family: $font-body;
+	background-image: url('@/assets/images/bg.webp');
+	background-color: $bg-color1;
+	color: $text-color;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: $font-title1;
+}
+
+.button{
+	background-color: $color2;
+	color: $text-color;
+	outline: 2px solid $color2;
+	font-weight: 600;
+	padding: .75em 1em;
+	border-radius: .5rem;	
+	transition: all .3s ease-out;
+	&:hover, &:focus {
+		background-color: $color2-hover;
+		transform: scale(0.97);
+	}
+	@media (max-width: 768px) {
+		font-size: 0.75rem;
+	}
+}
+
+.wrapper {
+	max-width: 80em;
+	min-height: 100%;
+	margin: 0 auto .25em;
+		
+}
