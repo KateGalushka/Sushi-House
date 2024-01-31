@@ -1,45 +1,64 @@
-<script setup>
-import NavBar from '@/components/NavBar.vue';
-</script>
-
 <template>
-	<header class="wrapper">
-		<NavBar/>
-	</header>
-  <main>
-    <section class="wrapper top">
-		 <div class="top__inner">
-			<div class="top__inner-content">
+	<main-master-page>
+    <section class="wrapper">
+		 <div class="hero">
+			<div class="hero__content">
 				<h1>Найсмачніші суші	у твоєму місті</h1>
 				<p>Замовляйте улюблені страви онлайн</p>
-				<div class="top__inner-btns">
+				<div class="hero__btns">
+					<button class="button" @click="scrollToOrderRules">
+						Як замовити?
+					</button>
 					<button class="button">Перейти до меню</button>
-					<button class="button">Умови доставки</button>
 				</div>
 			</div>
-			<img class="top__inner-img" src="@/assets/images/home.png">
+			<img class="hero__img" src="@/assets/images/home.png">
 		</div>
 	 </section>
-	 <div>
-		Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia earum nihil unde assumenda veniam inventore repellendus culpa soluta odio. Et neque praesentium cum dolorum ducimus quae fugiat optio ipsa. Ipsum.
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque, ut, libero excepturi ab magnam ratione maiores sed nulla asperiores, quam beatae itaque distinctio deserunt! Eius, molestiae, beatae minima veniam, pariatur doloremque eum nulla quibusdam eligendi nemo maiores voluptatem voluptatibus labore nam? Sunt eveniet esse quibusdam praesentium natus nostrum enim fugiat adipisci veniam iure? Aut deleniti sit quasi, eum eligendi earum sed ut eaque at tempore, quos consequatur, harum maiores nulla nemo labore facilis. Aperiam fugit sapiente voluptas accusantium ullam. Asperiores ullam sapiente sint voluptates sequi magnam ut accusamus veniam voluptas, libero laborum amet quis, dolore velit fugit eveniet quo delectus!
-
-	 </div>
-  </main>
+	
+	<section class="wrapper rules" ref="orderRulesSection" id="orderRulesSection">
+		<order-rules/>
+	</section>
+	<section class="wrapper about" ref="aboutSection" id="aboutSection">
+	  <about-section/>
+	</section>
+	 
+	 
+	 
+	</main-master-page>
+  
 </template>
+<script setup>
+import MainMasterPage from '@/masterPages/MainMasterPage.vue';
+import OrderRules from '@/components/OrderRules.vue';
+import AboutSection from '@/components/AboutSection.vue';
+import { RouterView } from 'vue-router';
+import { ref } from 'vue'; 
+
+const orderRulesSection = ref();
+
+const scrollToOrderRules = () => {
+	if (orderRulesSection.value) {
+		orderRulesSection.value.scrollIntoView({ behavior: 'smooth' });
+	}
+};
+
+
+
+</script>
 
 <style lang="scss" scoped>
-.top__inner {
+.hero {
 	display: flex;
 	align-items: center;
 	padding: 1.5rem;
-	&-img{
+	&__img{
 		object-fit: cover;
 		max-width: 60%;
 		flex: 1 1 auto;
 		overflow: clip;
 	}
-	&-content {
+	&__content {
 		display: flex;
 		flex-direction: column;
 		gap: 1em;
@@ -47,16 +66,22 @@ import NavBar from '@/components/NavBar.vue';
 		h1{
 			text-transform: uppercase;
 			letter-spacing: 1px;
-			font-size: clamp(1.125rem, 0.55rem + 2.875vw, 4rem);
+			font-size: clamp(1.125rem, 0.167rem + 4.792vw, 4rem);
 			font-weight: 700;
 			line-height: 1.15;
 		}
 	}
-	&-btns {
+	&__btns {
 		display: flex;
 		gap: .75em;
+		flex-wrap: wrap;
 	}
-
+	@media (max-width:768px) {
+		margin-top: 6.5rem;
+	
+	}
 }
+
+
 
 </style>

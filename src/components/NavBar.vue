@@ -1,17 +1,12 @@
-<script setup>
-import {ref} from 'vue';
-	const isMenuOpen = ref(false);
-	function toggleMenu() {
-		return isMenuOpen.value = isMenuOpen.value ? false : true;
-	};
-
-</script>
 <template>
 	<div class="navbar" :class="{'open': isMenuOpen}">
-		<div class="navbar__logo">
+		<router-link to="/" class="navbar__logo">
 			<img class="navbar__logo-img" src="../assets/images/logo-SH.png" alt="logo Sushi House">
 			<p class="navbar__logo-text">Sushi <span>H</span>ouse</p>
-		</div>
+		</router-link>
+		<!-- <div class="navbar__menu-links navbar__tel">
+		</div>  -->
+		
 		<button class="navbar__burger-btn" @click="toggleMenu">
 			<span></span>
 			<span></span>
@@ -21,15 +16,36 @@ import {ref} from 'vue';
 			<nav class="navbar__menu-links">
 				<router-link to="/">
 					<font-awesome-icon :icon="['fas', 'house']" />
-					Головна
+					&nbsp;Головна
 				</router-link> 
+				<router-link :to="{name: 'menu'}">
+					<!-- <font-awesome-icon :icon="['fas', 'list']" /> -->
+					<font-awesome-icon :icon="['fas', 'utensils']" />
+					&nbsp;Меню
+				</router-link>
+								
+				<a href="#" class="viber">
+					<font-awesome-icon :icon="['fab', 'viber']" style="font-size:x-large;" />
+				</a>
+				<a href="tel:08001112233">
+					<font-awesome-icon :icon="['fas', 'phone']" />
+					<span>&nbsp; 0-800-111-22-33</span>
+				</a>
 				
-				<router-link to="/about">Про нас</router-link> 
-				<!-- <router-link>Контакти</router-link> -->
 			</nav>
 		</div>
 	</div>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+
+const isMenuOpen = ref(false);
+function toggleMenu() {
+	return isMenuOpen.value = isMenuOpen.value ? false : true;
+};
+
+</script>
 
 
 
@@ -44,7 +60,9 @@ import {ref} from 'vue';
 	width: 100%;
 	top: 0;
 	left: 0;
-	background-color: rgba(255, 248, 243, 0.5);
+	background-color: rgba(255, 248, 243, 0.8);
+	background-color: $bg-color1;
+	z-index: 10;
 }
 
 .navbar__logo{
@@ -61,8 +79,8 @@ import {ref} from 'vue';
 		font-weight: 600;
 		text-transform: uppercase;
 		span {
-		color: $color2;
-		}
+			color: $color2;
+			}
 	}
 }
 	
@@ -75,7 +93,7 @@ import {ref} from 'vue';
 	background-color: transparent;
 	border: none;
 	outline: none;
-	z-index: 5;
+	z-index: 15;
 	span {
 		position: absolute;
 		display: block;
@@ -107,7 +125,7 @@ import {ref} from 'vue';
 	}
 }
 
-a {
+.navbar__menu-links a {
 	font-weight: bold;
 	transition: all .3s ease-in;
 	margin: 0 1em;
@@ -122,15 +140,19 @@ a {
 		bottom: -5px;
 		transition: 0.3s;
 		border-radius: 1rem;
-		}
+	}
 	&:hover::after{
 		width: 100%;
 		left: 0;
+	}
+	&.viber:hover {
+		color:rgb(109, 28, 180);
 	}
 	&.router-link-exact-active	{
 		color: $color2;
 	}
 }
+
 
 .navbar__user {
 	display: flex;
@@ -150,7 +172,7 @@ a {
 	}
 	.navbar__menu {
 		position: absolute;
-		top: -25rem;
+		top: -20rem;
 		right: 0;
 		min-height: 100vh;
 		width: 50%;
@@ -160,7 +182,6 @@ a {
 		gap: 1rem;
 		background-color: $bg-color1;
 		padding: 4rem 2rem;
-
 		visibility: hidden;
 		transition: transform .5s ease-out;
 		&-links {
