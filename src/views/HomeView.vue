@@ -22,7 +22,10 @@
 	<section class="wrapper about" ref="aboutSection" id="aboutSection">
 	  <about-section/>
 	</section>
+	<section class="wrapper map">
+		<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2575.299710736952!2d30.119115376820513!3d49.7992328340382!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d342182b0a3fb7%3A0x71c87108a58bd62b!2z0LLRg9C70LjRhtGPINCv0YDQvtGB0LvQsNCy0LAg0JzRg9C00YDQvtCz0L4sINCR0ZbQu9CwINCm0LXRgNC60LLQsCwg0JrQuNGX0LLRgdGM0LrQsCDQvtCx0LsuLCAwOTEwMA!5e0!3m2!1suk!2sua!4v1706791288420!5m2!1suk!2sua" width="1280" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 	 
+	</section>
 	 
 	 
 	</main-master-page>
@@ -32,7 +35,7 @@
 import MainMasterPage from '@/masterPages/MainMasterPage.vue';
 import OrderRules from '@/components/OrderRules.vue';
 import AboutSection from '@/components/AboutSection.vue';
-import { RouterView } from 'vue-router';
+
 import { ref } from 'vue'; 
 
 const orderRulesSection = ref();
@@ -79,6 +82,14 @@ const scrollToOrderRules = () => {
 	@media (max-width:768px) {
 		margin-top: 6.5rem;
 	
+	}
+}
+.map {
+	iframe {
+		max-width: 100%;
+		width: 100%;
+		margin: 0 auto;
+
 	}
 }
 

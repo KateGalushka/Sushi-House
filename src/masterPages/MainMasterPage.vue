@@ -5,6 +5,7 @@
 	</header>
 	<main>
 		<slot></slot>
+		<cart-button :cartItemsCount="0"/>
 
 	</main>
 	<footer>
@@ -16,6 +17,7 @@
 import NavBar from '@/components/NavBar.vue';
 import VerticalMenu from '@/components/VerticalMenu.vue';
 import FooterComponent from '@/components/FooterComponent.vue';
+import CartButton from '@/components/CartButton.vue';
 
 </script>
 

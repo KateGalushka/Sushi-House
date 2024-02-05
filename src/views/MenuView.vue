@@ -1,11 +1,12 @@
 <template>
-	<div>
-		<menu-list-component/>
-	</div>
+	<main-master-page>
+		<menu-categories/>
+	</main-master-page>
 </template>
 
 <script setup>
-import MenuListComponent from '../components/MenuListComponent.vue'
+import MainMasterPage from '@/masterPages/MainMasterPage.vue';
+import MenuCategories from '../components/MenuCategories.vue';
 
 </script>
 

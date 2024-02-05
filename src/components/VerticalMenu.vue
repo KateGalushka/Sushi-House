@@ -1,6 +1,6 @@
 <template>
 	<div class="side-menu">
-		<ul>
+		<!-- <ul>
 			<li class="side-menu__item">
 				<a href="#">
 					<img src="@/assets/images/logo/logo-sushi.svg" width="30" height="30" alt="logo-sushi">
@@ -15,14 +15,14 @@
 			</li>
 			<li class="side-menu__item">
 				<a href="#">
-					<img src="@/assets/images/logo/logo-hot dishes.svg" width="30" height="30" alt="logo-hot dishes">
-					<span>Гарячі страви</span>
+					<img src="@/assets/images/logo/logo-salads.svg" width="30" height="30" alt="logo-salads">
+					<span>Салати</span>
 				</a>
 			</li>
 			<li class="side-menu__item">
 				<a href="#">
-					<img src="@/assets/images/logo/logo-salads.svg" width="30" height="30" alt="logo-salads">
-					<span>Салати</span>
+					<img src="@/assets/images/logo/logo-hot-dishes.svg" width="30" height="30" alt="logo-hot dishes">
+					<span>Гарячі страви</span>
 				</a>
 			</li>
 			<li class="side-menu__item">
@@ -37,14 +37,65 @@
 					<span>Напої</span>
 				</a>
 			</li>
+		</ul> -->
+		<ul>
+			<li class="side-menu__item" v-for="link in links" :key="link.title">
+				<button @click="goToCategory(link.path)">
+					<img :src=getImagePath(link.img) width="30" height="30" :alt=link.img>
+					<span>{{ link.title }}</span>
+			</button>
+			</li>
 		</ul>
-
 	</div>
 </template>
 
 <script setup>
-// import { ref } from 'vue';
+import { watch } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
+const links = [
+	{
+		path:'rolls',
+		img: 'logo-sushi.svg',
+		title: 'Суші та роли'
+	},
+	{
+		path:'sets',
+		img: 'logo-set.svg',
+		title: 'Набори і сети'
+	},
+	{
+		path:'salads',
+		img: 'logo-salads.svg',
+		title: 'Салати'
+	},
+	{
+		path:'hots',
+		img: 'logo-hot-dishes.svg',
+		title: 'Гарячі страви'
+	},
+	{
+		path:'pizza',
+		img: 'logo-pizza.svg',
+		title: 'Піца'
+	},
+	{
+		path:'drinks',
+		img: 'logo-drinks.svg',
+		title: 'Напої'
+	},
+];
+const getImagePath = (imgPath) => new URL(`../assets/images/logo/${imgPath}`, import.meta.url).href;
+
+function goToCategory(category) {
+	router.push({
+		name: 'category',
+		params: {
+			categoryTitle: category
+		}
+	});
+}
 
 </script>
 
@@ -101,7 +152,7 @@
 	border-bottom: 1px solid $text-color;
 	flex-shrink: 1;
 	transition: all .3s cubic-bezier(0.075, 0.82, 0.165, 1);
-	a {
+	button {
 		display: flex;
 		align-items: center;
 		gap: 1.25rem;

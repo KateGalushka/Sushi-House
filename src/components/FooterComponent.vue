@@ -64,7 +64,7 @@ import { computed, ref } from 'vue';
 
 const userPhone = ref(null);
 const phoneRegExp = /^\+38[ -]?0\d{2}[ -]?\d{3}[ -]?\d{2}[- ]?\d{2}$/;
-const isPhoneNumberValid = computed(()=> phoneRegExp.test(userPhone.value))
+const isPhoneNumberValid = computed(()=> phoneRegExp.test(userPhone.value));
 
 </script>
 

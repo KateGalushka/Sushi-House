@@ -16,12 +16,11 @@
 		<div class="card__buy">
 			<div class="product-quantity">
 				<button class="product-quantity__btn minus" :disabled="!inputPositive" @click="decreaseQuantity">
-					<span></span>
+					<font-awesome-icon :icon="['fas', 'minus']" />
 				</button>
 				<input class="product-quantity__input" v-model="product.quantity" type="number" min="1" step="1" readonly>
 				<button class="product-quantity__btn plus" @click="increaseQuantity">
-					<span>
-					</span>
+					<font-awesome-icon :icon="['fas', 'plus']" />
 				</button>
 			</div>
 
@@ -121,7 +120,7 @@ const inputPositive = computed(()=> product.value.quantity >=1);
 	// display: grid;
 	// place-items: center;
 	// grid-template-columns: repeat(3, 1fr);
-	border: .25px solid $text-color;
+	// border: .25px solid $text-color;
 	background-color: $color2-hover;
 
 }

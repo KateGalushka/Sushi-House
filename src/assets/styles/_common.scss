@@ -1,4 +1,4 @@
-body{ 
+body { 
 	font-family: $font-body;
 	background-image: url('@/assets/images/bg.webp');
 	background-color: $bg-color1;
@@ -13,6 +13,7 @@ h3,
 h4 {
 	font-family: $font-title1;
 }
+
 
 .button{
 	background-color: $color-btn;

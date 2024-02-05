@@ -1,21 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
+// import MenuListComponent from '@/components/MenuListComponent.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
+   {
       path: '/',
       name: 'home',
       component: HomeView,
-		
-    },
-    {
+	},
+   {
       path: '/menu',
       name: 'menu',
       component: () => import('../views/MenuView.vue')
-    },
-    {
+   },
+	{
+		path: '/menu/:categoryTitle?',
+		name: 'category',
+		props: true,
+		component: () => import('../components/MenuListComponent.vue')
+		// component: MenuListComponent,
+	},
+	{
       path: '/about',
       name: 'about',
       // route level code-splitting
