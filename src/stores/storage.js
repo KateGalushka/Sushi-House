@@ -36,6 +36,4 @@ export const useStorageStore = defineStore('storage', () => {
 		// getImageUrl,
 		setImagePath
 	}
-	
-	
 })

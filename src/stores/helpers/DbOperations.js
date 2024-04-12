@@ -1,4 +1,4 @@
-import firebaseDB from '@/firebase-config';
+import firebaseDB from '../../../firebase-config';
 import {
   doc,
   collection,

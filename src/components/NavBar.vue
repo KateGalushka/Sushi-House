@@ -29,16 +29,19 @@
 				</a>
 				<a href="tel:08001112233">
 					<font-awesome-icon :icon="['fas', 'phone']" />
-					<span>&nbsp; 0-800-111-22-33</span>
+					<span style="white-space: nowrap;">&nbsp; 0-800-111-22-33</span>
 				</a>
-				
 			</nav>
+			<div class="navbar__user">
+				<user-profile-component/>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import UserProfileComponent from './UserProfileComponent.vue';
 
 const isMenuOpen = ref(false);
 function toggleMenu() {
@@ -80,7 +83,7 @@ function toggleMenu() {
 		text-transform: uppercase;
 		span {
 			color: $color2;
-			}
+		}
 	}
 }
 	
@@ -118,7 +121,7 @@ function toggleMenu() {
 	z-index: 4;
 	gap: clamp(1rem, 2rem, 3rem);
 	&-links {
-		display: inline-flex;
+		display: flex;
 		gap: 1rem;
 		line-height: 1.25;
 		text-align: center;
@@ -128,7 +131,7 @@ function toggleMenu() {
 .navbar__menu-links a {
 	font-weight: bold;
 	transition: all .3s ease-in;
-	margin: 0 1em;
+	margin: 0 .75em;
 	position: relative;
 	&::after {
 		content: "";
@@ -155,27 +158,19 @@ function toggleMenu() {
 
 
 .navbar__user {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-	gap: 1rem;
+	padding-bottom: 0.5rem;
 }
 
 @media (max-width:992px) {
-	.navbar {
-		// position: static;
-		// padding: 0.5rem 2rem;
-
-	}
 	.navbar__burger-btn {
 		display: block;
 	}
 	.navbar__menu {
 		position: absolute;
-		top: -20rem;
+		top: -22rem;
 		right: 0;
 		min-height: 100vh;
-		width: 50%;
+		min-width: 50%;
 		flex-direction: column;
 		align-items: end;
 		justify-content: start;
@@ -200,7 +195,6 @@ function toggleMenu() {
 			opacity: .95;
 			visibility: visible;
 			font-size: 1.125rem;
-			
 		}
 		.navbar__burger-btn span {
 			background-color: $text-color;

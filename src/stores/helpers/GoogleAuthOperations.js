@@ -1,4 +1,4 @@
-import { auth } from '@/firebase-config.js';
+import { auth } from '../../../firebase-config';
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -16,13 +16,20 @@ class GoogleAuthOperations {
     this.saveCredentialsInLocalStorage = saveCredentialsInLocalStorage;
     this.authCredentialLocalStorageKey = authCredentialLocalStorageKey;
   }
-
+  
   loginWithGoogleAccountPopup() {
     return new Promise((resolve, reject) => {
       const provider = new GoogleAuthProvider()
+		console.log(provider)
       signInWithPopup(auth, provider)
         .then((loginResult) => {
           resolve(loginResult?.user)
+			  if (loginResult?.user){
+				  localStorage.setItem('user', JSON.stringify(loginResult?.user));
+			  }
+			//   let credential = provider.credentialFromResult(loginResult);
+			//   console.log(credential)
+			//   localStorage.setItem('authCredential', JSON.stringify(credential));
         })
         .catch((error) => {
           reject(error)
@@ -33,19 +40,22 @@ class GoogleAuthOperations {
   }
   signUpWithWithEmailAndPassword({ email, password }) {
     return new Promise((resolve, reject) => {
-      if (!email || !password) reject(false)
-      else {
+      // if (!email || !password) reject(false)
+      // else {
         const auth = getAuth()
+		  console.log('auth', auth)
+		  console.log('email, password: ', email, password)
         createUserWithEmailAndPassword(auth, email, password)
           .then((loginResult) => {
             resolve(loginResult?.user)
+				console.log('loginResult in createUserWithEmail: ', loginResult)
           })
           .catch((error) => {
             reject(error)
             // const errorCode = error.code;
             // const errorMessage = error.message;
           })
-      }
+      // }
     })
   }
   signInWithWithEmailAndPassword({ email, password }) {

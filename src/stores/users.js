@@ -58,7 +58,7 @@ export const useUsersStore = defineStore('users', () => {
 
   const getUsersList = computed(() => usersList.value);
   const getCurrentUser = computed(() => currentUser.value);
-  const getCurrentUserPermissions = computed(() => currentUser?.value?.permissions ?? {})
+  
 
   return {
     usersList,
@@ -71,6 +71,6 @@ export const useUsersStore = defineStore('users', () => {
 
     getUsersList,
     getCurrentUser,
-    getCurrentUserPermissions
+    
   }
 })

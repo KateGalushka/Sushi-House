@@ -10,26 +10,25 @@ export const useAuthStore = defineStore('auth', () => {
   const { generalApiOperation } = generalStore;
 
   const user = ref(null);
+//   const user = ref({name: 'Kate', email: 'kgalushka@gmail.com'});
 
   const getUser = computed(() => user.value);
+
+  
 
   async function signUpWithWithEmailAndPassword(email, password) {
     generalApiOperation({
       operation: () => authOperations.signUpWithWithEmailAndPassword({ email, password })
     }).then(async (res) => {
       user.value = res;
+		console.log('user in auth: ', user.value)
 
       await usersStore.addUserWithCustomId({
         id: user?.value?.uid,
         data: {
           email,
-          permissions: {
-            create: false,
-            read: true,
-            update: false,
-            delete: false
-          }
-        }
+          cart: []
+      	}
       })
     })
   }
@@ -41,10 +40,12 @@ export const useAuthStore = defineStore('auth', () => {
       })
         .then((res) => {
           user.value = res;
+			 console.log('user: ', user.value)
           usersStore
             .loadUserById(user.value.uid)
             .then(() => {
               resolve(res)
+				  console.log('from usersStore: ', res)
             })
             .catch((error) => reject(error))
         })
@@ -59,18 +60,15 @@ export const useAuthStore = defineStore('auth', () => {
       })
         .then((res) => {
           user.value = res
-
+			 console.log('user: ', res)
+			  
           usersStore
             .addUserWithCustomId({
               id: user?.value?.uid,
               data: {
                 email: user?.value?.email,
-                permissions: {
-                  create: false,
-                  read: true,
-                  update: false,
-                  delete: true
-                }
+					 name: user?.value?.displayName,
+                cart: []
               }
             })
             .then(() => {
@@ -87,6 +85,7 @@ export const useAuthStore = defineStore('auth', () => {
     generalApiOperation({
       operation: () => authOperations.logout()
     })
+	 user.value = null
     usersStore.currentUser = null
   }
 

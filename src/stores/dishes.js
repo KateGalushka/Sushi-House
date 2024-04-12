@@ -9,6 +9,11 @@ export const useDishesStore = defineStore('dishes', () => {
 	const setDishesList = () => {
 		dishesList.value = dishes;
 	};
+
+	const getDishById = computed(() => {
+		return (id) => dishesList.value.find(dish => dish.id ===id)
+	});
+
 	const categoryFilter = ref(null);
 	
 	const dishesFilteredByCategory = computed(() => {
@@ -23,6 +28,7 @@ export const useDishesStore = defineStore('dishes', () => {
    return {
 		dishesList,
 		setDishesList,
+		getDishById,
 		categoryFilter,
 		dishesFilteredByCategory,
 		

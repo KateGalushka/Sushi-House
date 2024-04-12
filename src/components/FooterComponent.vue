@@ -77,10 +77,10 @@ const isPhoneNumberValid = computed(()=> phoneRegExp.test(userPhone.value));
 	display: grid;
 	gap: 2em 1.5em;
 	grid-template-columns: repeat(3, minmax(150px, 1.5fr)) .5fr;
-	@media (max-width:990px) {
+	@media (max-width: toRem(990)) {
 		grid-template-columns: repeat((2, 1fr));
 	}
-	@media (max-width:500px) {
+	@media (max-width: toRem(500)) {
 		grid-template-columns: auto;
 	}
 }
