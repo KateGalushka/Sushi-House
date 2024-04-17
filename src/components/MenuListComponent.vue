@@ -37,7 +37,7 @@
 
   import { useDishesStore } from '@/stores/dishes';
   const dishesStore = useDishesStore();
-  const { dishesList, categoryFilter, dishesFilteredByCategory } = storeToRefs(dishesStore);
+  const { categoryFilter, dishesFilteredByCategory } = storeToRefs(dishesStore);
 
   const props = defineProps({
     categoryTitle: {
@@ -48,17 +48,8 @@
 
   const listTitle = ref('');
 
-  onMounted(async () => {
-    await dishesStore.setDishesList(); //set data from json-file
+  onMounted(() => {
     categoryFilter.value = props.categoryTitle;
-   //  console.log('filteredDishes: ', dishesFilteredByCategory.value)
-
-    //get images from storage
-    let namesArr = [];
-    dishesList.value.map((dish) => namesArr.push(dish.img_name));
-    const imagesNamesArray = Array.from(new Set(namesArr));
-   //  console.log('imagesNamesArray: ', imagesNamesArray)
-   //  await imagesNamesArray.forEach((imageName)=> storage.setImagePath(imageName));
     listTitle.value = dishesFilteredByCategory.value[0]['categoryUA'];
   })
 

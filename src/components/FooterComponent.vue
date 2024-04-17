@@ -129,6 +129,7 @@ const isPhoneNumberValid = computed(()=> phoneRegExp.test(userPhone.value));
 		}
 		.submit {
 			padding: .35em .75em;
+			margin-inline: auto;
 			&[disabled] {
 				opacity: .3;
 			}
