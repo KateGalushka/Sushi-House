@@ -36,7 +36,7 @@
             >
               Обрати ще
             </button>
-            <button class="button" @click="goToCheckout">Оформити замовлення</button>
+            <button class="button" :disabled="!cartItemsCount" @click="goToCheckout">Оформити замовлення</button>
           </template>
         </CartComponent>
       </div>

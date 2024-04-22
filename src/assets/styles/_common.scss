@@ -33,6 +33,14 @@ h4 {
 		background-color: $color2-hover;
 		transform: scale(0.97);
 	}
+	&[disabled] {
+		opacity: .3;
+		&:hover {
+			background-color: $color-btn;
+			transform: unset;
+			cursor: auto;
+		}
+	}
 	@media (max-width: 768px) {
 		font-size: 0.875rem;
 	}

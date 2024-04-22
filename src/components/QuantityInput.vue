@@ -68,10 +68,11 @@
     &__input {
       width: 40px;
       text-align: center;
-
+		-moz-appearance: textfield;
       &::-webkit-inner-spin-button,
       &::-webkit-outer-spin-button {
         -webkit-appearance: none;
+        
       }
     }
   }

@@ -33,8 +33,8 @@
 			</div>
 		<div class="footer__section callMe">
 			<p>Залиште свій номер, ми з Вами зв'яжемось:</p>
-			<input v-model="userPhone" type="phone" placeholder="+38-099-999-99-99" aria-label="Введіть свій телефон">
-			<button class="button submit" type="submit" :disabled="!isPhoneNumberValid" @click="handleSubmit">
+			<input v-model="userPhone" type="tel" placeholder="(XXX)-XXX-XX-XX" maxlength="15" aria-label="Введіть свій телефон">
+			<button class="button submit" type="submit" :disabled="!isPhoneNumberValid" @click.prevent="handleSubmit">
 				Відправити
 			</button>
 		</div>
@@ -60,17 +60,34 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-const userPhone = ref(null);
-const phoneRegExp = /^\+38[ -]?0\d{2}[ -]?\d{3}[ -]?\d{2}[- ]?\d{2}$/;
-const isPhoneNumberValid = computed(()=> phoneRegExp.test(userPhone.value));
+const userPhone = ref('');
+const phoneRegExp = /^\(0\d{2}\)[ -]?\d{3}[ -]?\d{2}[- ]?\d{2}$/;
+const isPhoneNumberValid = computed(()=> {
+	return phoneRegExp.test(userPhone.value)
+});
+
+watch(userPhone, (newVal, oldVal)=>{
+	if (newVal.length > oldVal.length) {
+		userPhone.value = newVal.replace(/\D/g, '')
+										.replace(/^(\d{3})(\d{3})(\d{2})(\d{2})$/g, `($1) $2-$3-$4`)
+		}
+	},
+ 	
+)
+// const formatNumber = () => {
+//   let formattedPhone = userPhone.value.replace(/\D/g, '').replace(/^(\d{3})?(\d{3})?(\d{2})?(\d{2})$/g, `($1) $2-$3-$4`);
+//   userPhone.value = formattedPhone;
+// };
 
 </script>
 
 <style lang="scss" scoped>
 .footer__container {
 	background-color: $bg-color1;
+	max-width: 100%;
+	width: 100%;
 }
 .footer {
 	padding: 1.5rem .5rem 3rem;
@@ -130,16 +147,13 @@ const isPhoneNumberValid = computed(()=> phoneRegExp.test(userPhone.value));
 		.submit {
 			padding: .35em .75em;
 			margin-inline: auto;
-			&[disabled] {
-				opacity: .3;
-			}
 		}
 	}
 	&.socials {
 		display: grid;
 		place-items: center;
 		font-size: 1.5rem;
-		@media (max-width:990px) {
+		@media (max-width: toRem(990)) {
 			grid-template-columns: repeat((4, 1fr));
 		}
 		.instagram:hover, .instagram:focus {
