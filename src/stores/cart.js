@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { useDishesStore } from "./dishes";
-import { toast } from "vue3-toastify";
+import { notify } from './helpers/toastify.js';
+
 
 export const useCartStore = defineStore('cart', () => {
 
@@ -22,24 +23,22 @@ export const useCartStore = defineStore('cart', () => {
 	const cartTotalSum = computed(() => {
 		const dish_store = useDishesStore();
 		return userCart.value.reduce((total, current) => total + dish_store.getDishById(current.id).price * current.quantity, 0);
-	})
+	});
+
+	const cartWithTitles = computed(()=> {
+		const dish_store = useDishesStore();
+		return userCart.value.map(dish => {
+			return {
+				dishTitle: dish_store.getDishById(dish.id)?.title,
+				orderedQuantity: dish.quantity
+			}
+		})
+	});
 
 	const saveCartToLocalStorage = () => {
 		localStorage.setItem('cart', JSON.stringify(userCart.value));
-	}
-	const notify = (type, message) => {
-		if (type === 'success') {
-			toast.success(message, {
-				position: toast.POSITION.TOP_CENTER,
-			});
-		}
-		if (type === 'warning') {
-			toast.warning(message,  {
-				position: toast.POSITION.TOP_CENTER,
-			});
-		}
-	}
-
+	};
+	
 	function addItemToCart(dishId){
 		let index = this.userCart.findIndex(item => item.id === dishId);
 		if (index !== -1) {
@@ -55,7 +54,7 @@ export const useCartStore = defineStore('cart', () => {
 			saveCartToLocalStorage();
 			notify('success', 'Товар додано у кошик!');
 		}
-		console.log('cart: ', this.userCart);
+		// console.log('cart: ', this.userCart);
 	}
 	
 	
@@ -107,6 +106,7 @@ export const useCartStore = defineStore('cart', () => {
 		cartItemsCount,
 		isItemInCart,
 		cartTotalSum,
+		cartWithTitles,
 		
 		addItemToCart,
 		deleteItemFromCart,

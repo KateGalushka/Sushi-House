@@ -1,45 +1,27 @@
-import DbOperations from './helpers/DbOperations'
-const collectionDB = new DbOperations('orders')
+import DbOperations from './helpers/DbOperations';
+const collectionDB = new DbOperations('orders');
 
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
-import { useGeneralStore } from './general'
-import { toast } from 'vue3-toastify'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
+import { useGeneralStore } from './general';
+import { notify } from './helpers/toastify.js';
 
 export const useOrdersStore = defineStore('orders', () => {
-  const { generalApiOperation } = useGeneralStore()
-  const router = useRouter()
+  const { generalApiOperation } = useGeneralStore();
 
-  const currentOrder = ref({})
-
-  const notify = (type, message) => {
-    if (type === 'success') {
-      toast.success(message, {
-        position: toast.POSITION.BOTTOM_CENTER
-      })
-    }
-    if (type === 'error') {
-      toast.error(message, {
-        position: toast.POSITION.BOTTOM_CENTER,
-        autoClose: 3000
-      })
-    }
-  }
+  const currentOrderSubmit = ref(null);
 
   async function addOrder(orderData) {
-    currentOrder.value = await generalApiOperation({
+    currentOrderSubmit.value = await generalApiOperation({
       operation: () => collectionDB.addItem(orderData),
-      successCallback: () => {
-        notify('success', 'Замовлення успішно відправлено');
-      //   setTimeout(()=>router.push({ name: 'home' }), 3500);
-      },
+      successCallback: () => notify('success', 'Замовлення успішно відправлено'),
       errorCallBack: () => notify('error', 'Щось пішло не так...')
     })
   }
 
   return {
-    currentOrder,
-    addOrder
+    currentOrderSubmit,
+    addOrder,
+    
   }
 })

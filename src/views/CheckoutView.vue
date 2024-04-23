@@ -3,38 +3,45 @@
     <div class="checkout wrapper">
       <section class="checkout__section ordering">
         <h2>Оформлення замовлення</h2>
-        <div class="ordering__delivery">
-          <label for="pickup">
-            <input
-              type="radio"
-              id="pickup"
-              name="delivery"
-              value="pickup"
-				  checked
-              v-model="deliveryMethod"
-            />
-            <font-awesome-icon :icon="['fas', 'bag-shopping']" />&nbsp;
-            <span>Самовивіз</span>
-          </label>
-
-          <label for="courier">
-            <input
-              type="radio"
-              id="courier"
-              name="delivery"
-              value="courier"
-              v-model="deliveryMethod"
-            />
-            <font-awesome-icon :icon="['fas', 'truck-fast']" />&nbsp;
-            <span>Доставка кур'єром</span>
-          </label>
-        </div>
-
         <form
           class="ordering__form"
-			 ref="form"
-        
+          ref="form"
+          id="form"
+          @submit.prevent="handleFormSubmit"
         >
+          <div class="ordering__delivery">
+            <label for="pickup">
+              <input
+                type="radio"
+                id="pickup"
+                name="delivery"
+                value="pickup"
+                checked
+                v-model="deliveryMethod"
+              />
+              <font-awesome-icon :icon="['fas', 'bag-shopping']" />&nbsp;
+              <span>Самовивіз</span>
+            </label>
+
+            <label for="courier">
+              <input
+                type="radio"
+                id="courier"
+                name="delivery"
+                value="courier"
+                v-model="deliveryMethod"
+              />
+              <font-awesome-icon :icon="['fas', 'truck-fast']" />&nbsp;
+              <span>Доставка кур'єром</span>
+            </label>
+          </div>
+
+          <!-- <form
+          class="ordering__form"
+			 ref="form"
+			 id="form"
+			 @submit.prevent="handleFormSubmit"
+        > -->
           <label class="ordering__form-label"
             >Контакти
             <div class="ordering__form-contacts">
@@ -43,6 +50,8 @@
                   type="text"
                   placeholder="Вкажіть ім'я*"
                   required
+						minlength="4"
+                  name="userName"
                   v-model="user.name"
                 />
                 <span></span>
@@ -51,27 +60,37 @@
                 <input
                   type="tel"
                   placeholder="Вкажіть телефон: (XXX)-XXX-XX-XX"
-						maxlength="15"
+                  maxlength="15"
                   required
+                  name="userPhone"
                   v-model="user.phone"
                 />
                 <span></span>
-					 <p v-if="!isPhoneNumberValid" class="ordering__form-contacts remark">Введіть номер телефона у форматі 0XX-XXX-XX-XX</p>
+                <p
+                  v-if="isRemarkVisible"
+                  class="ordering__form-contacts remark"
+                >
+                  Введіть номер телефона у форматі 0XX-XXX-XX-XX
+                </p>
               </div>
               <div>
                 <input
                   type="email"
                   placeholder="Вкажіть email"
+                  name="userEmail"
                   v-model="user.email"
                 />
               </div>
-				  <p class="ordering__form-contacts remark">* - обов'язкові поля</p>
+              <!-- <p class="ordering__form-contacts remark">* - обов'язкові поля</p> -->
             </div>
           </label>
           <label class="ordering__form-label"
             >Дата та час
             <div class="ordering__form-time">
-              <select v-model="dayOfDelivery">
+              <select
+                v-model="dayOfDelivery"
+                name="dayOfDelivery"
+              >
                 <option :value="new Date().toLocaleDateString('uk-UA')">Сьогодні</option>
                 <option
                   v-for="(day, index) in daysArray"
@@ -81,7 +100,10 @@
                   {{ day }}
                 </option>
               </select>
-              <select v-model="timeOfDelivery">
+              <select
+                v-model="timeOfDelivery"
+                name="timeOfDelivery"
+              >
                 <option
                   selected
                   :value="new Date().toLocaleTimeString('uk-UA')"
@@ -106,10 +128,11 @@
               <input
                 type="text"
                 v-model="user.address"
-					 required
+                required
                 placeholder="Вкажіть адресу доставки*"
+                name="userAddress"
               />
-				  <span></span>
+              <span></span>
             </div>
           </label>
           <label class="ordering__form-label"
@@ -119,9 +142,11 @@
                 type="text"
                 v-model="user.comment"
                 placeholder="Коментарій"
+                name="userComment"
               />
             </div>
           </label>
+          <p class="ordering__form-contacts remark">* - обов'язкові поля</p>
 
           <div class="ordering__form-pay">
             <h3 class="ordering__form-label">Спосіб оплати</h3>
@@ -152,7 +177,6 @@
           <button
             type="submit"
             class="button"
-				@click.prevent="submitData"
           >
             Замовити
           </button>
@@ -173,8 +197,8 @@
 <script setup>
   import MainMasterPage from '@/masterPages/MainMasterPage.vue'
   import CartComponent from '@/components/CartComponent.vue'
-  import { toast } from 'vue3-toastify'
-  import { ref, computed, watch } from 'vue'
+  import { notify } from '../stores/helpers/toastify.js';
+  import { ref, computed, watch, onMounted } from 'vue'
 
   import { useRouter } from 'vue-router'
   const router = useRouter()
@@ -183,11 +207,11 @@
 
   import { useCartStore } from '@/stores/cart'
   const cart_store = useCartStore()
-  const { userCart } = storeToRefs(cart_store)
+  const { userCart, cartWithTitles } = storeToRefs(cart_store)
 
   import { useOrdersStore } from '@/stores/orders'
   const orders_store = useOrdersStore()
-  const {currentOrder} = storeToRefs(orders_store)
+  const { currentOrderSubmit } = storeToRefs(orders_store)
 
   const form = ref(null)
 
@@ -231,70 +255,83 @@
     return times
   })
 
- 	const phoneRegExp = /^\(0\d{2}\)[ -]?\d{3}[ -]?\d{2}[- ]?\d{2}$/;
-	const isPhoneNumberValid = computed(()=> {
-		return user.value.phone == null || phoneRegExp.test(user.value.phone)
-	});
-
-  watch(
-	[()=> dayOfDelivery.value, () => user.value.phone],
-	([newDayOfDelivery, newUserPhone], [oldDayOfDelivery, oldUserPhone]) => {
-    if (new Date(newDayOfDelivery).getDate() !== new Date().getDate()) {
-      currentHour.value = 9
-    }
+  const phoneRegExp = /^\(0\d{2}\)[ -]?\d{3}[ -]?\d{2}[- ]?\d{2}$/
+  const isPhoneNumberValid = computed(() => phoneRegExp.test(user.value.phone))
+  const isRemarkVisible = computed(()=> user.value.phone && !isPhoneNumberValid.value)
   
- 	if (newUserPhone?.length > oldUserPhone?.length) {
-		user.value.phone = newUserPhone.replace(/\D/g, '')
-												 .replace(/^(\d{3})(\d{3})(\d{2})(\d{2})$/g, `($1) $2-$3-$4`)
-		}
-	})
+  watch(
+    [() => dayOfDelivery.value, () => user.value.phone],
+    ([newDayOfDelivery, newUserPhone], [oldDayOfDelivery, oldUserPhone]) => {
+      if (new Date(newDayOfDelivery).getDate() !== new Date().getDate()) {
+        currentHour.value = 9
+      }
 
-  const submitData = async (event) => {
-	event.preventDefault();
-	if (deliveryMethod.value == '' || user.value.name == '' || user.value.phone == '' || payMethod.value == '' || dayOfDelivery.value == '' || timeOfDelivery.value == '') {
-		toast("Заповніть, будь ласка, всі обов'язкові поля", {
-				position: toast.POSITION.TOP_CENTER,
-			})
+      if (newUserPhone?.length > oldUserPhone?.length) {
+        user.value.phone = newUserPhone.replace(/\D/g, '')
+          						.replace(/^(\d{3})(\d{3})(\d{2})(\d{2})$/g, `($1) $2-$3-$4`)
+      }
+    }
+  )
+
+  const handleFormSubmit = async () => {
+	if (!user.value.name || !isPhoneNumberValid.value) {
+		notify('', "Заповніть, будь ласка, обов'язкові поля в правильному форматі")
+		return
 	} else {
+    // let formData = new FormData(form.value);
+    // formData.append('order', userCart.value)
     let formData = {
       deliveryMethod: deliveryMethod.value,
+      payMethod: payMethod.value,
       user: {
         name: user.value.name,
         phone: user.value.phone,
         email: user.value.email ?? '',
         comment: user.value.comment ?? ''
       },
-      payMethod: payMethod.value,
       date: {
         day: dayOfDelivery.value,
         time: timeOfDelivery.value
       },
-      order: userCart.value
-    }
-	 await orders_store.addOrder(formData);
+      order: cartWithTitles.value
+	   }
+    await orders_store.addOrder(formData)
 
-	 console.log('currentOrder in checkout: ', currentOrder.value)
-	 if (currentOrder.value) {
-		clearData();
-		clearLocalStorage();
-		setTimeout(()=>router.push({ name: 'home' }), 3500);
-	 }
-	 
+    console.log('currentOrderSubmit in checkout: ', currentOrderSubmit.value)
+    if (currentOrderSubmit.value) {
+      clearData()
+      clearLocalStorage()
+      setTimeout(() => router.push({ name: 'home' }), 3000)
+    }
+	}
   }
-}
 
   const clearData = () => {
-	deliveryMethod.value = '';
-	payMethod.value = '';
-	user.value = {};
-	dayOfDelivery.value = new Date().toLocaleDateString('uk-UA');
-	timeOfDelivery.value = new Date().toLocaleTimeString('uk-UA');
-	userCart.value = [];
+    deliveryMethod.value = ''
+    payMethod.value = ''
+    user.value = {}
+    dayOfDelivery.value = new Date().toLocaleDateString('uk-UA')
+    timeOfDelivery.value = new Date().toLocaleTimeString('uk-UA')
+    userCart.value = []
   }
   const clearLocalStorage = () => {
-	localStorage.removeItem('cart');
+    localStorage.removeItem('cart')
   }
 
+  onMounted(() => {
+    document.addEventListener('keydown', handleKeyDown)
+  })
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && event.target.tagName === 'INPUT') {
+      event.preventDefault()
+      let formArray = Array.from(form.value.elements)
+      let index = formArray.indexOf(event.target)
+      if (index !== -1) {
+        formArray[index + 1].focus()
+      }
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -338,7 +375,7 @@
           border-radius: 0.5rem;
           &:hover,
           &:focus {
-            outline: 2px solid $color2;
+            outline: 2px solid $color-btn;
           }
         }
         label:has(input:checked) {
@@ -366,13 +403,16 @@
             font-size: 0.875rem;
           }
           &:focus {
-            outline: 2px solid $color2;
+            outline: 2px solid $color-btn;
+          }
+          &:invalid {
+            border: 1px solid red;
           }
         }
-		   input:required + span::after {
-              content: ' *';
-              color: red;
-            }
+        input:required + span::after {
+          content: ' *';
+          color: red;
+        }
 
         &-label {
           display: block;
@@ -381,11 +421,11 @@
         &-contacts {
           input {
             width: clamp(toRem(200), toRem(400), calc(100% - 1rem));
-         }
+          }
           &.remark {
             font-size: 0.75rem;
-				color: red;
-				margin-top: .5rem;
+            color: red;
+            margin-top: 0.5rem;
           }
         }
         &-time {
