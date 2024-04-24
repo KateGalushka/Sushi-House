@@ -8,7 +8,7 @@
 					</router-link>
 				</li>
 				<li>
-					<a href="about">Про компанію</a>
+					<a href="#">Про компанію</a>
 				</li>
 				<li>
 					<a href="#">Умови доставки і оплати</a>
@@ -61,6 +61,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
+import {notify} from '../stores/helpers/toastify.js';
 
 const userPhone = ref('');
 const phoneRegExp = /^\(0\d{2}\)[ -]?\d{3}[ -]?\d{2}[- ]?\d{2}$/;
@@ -76,10 +77,10 @@ watch(userPhone, (newVal, oldVal)=>{
 	},
  	
 )
-// const formatNumber = () => {
-//   let formattedPhone = userPhone.value.replace(/\D/g, '').replace(/^(\d{3})?(\d{3})?(\d{2})?(\d{2})$/g, `($1) $2-$3-$4`);
-//   userPhone.value = formattedPhone;
-// };
+const handleSubmit = () => {
+	notify('success', "Дякуємо! Очікуйте на наш дзвінок!");
+	userPhone.value = ''
+}
 
 </script>
 

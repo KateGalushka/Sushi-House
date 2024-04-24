@@ -1,93 +1,98 @@
 import { auth } from '../../../firebase-config';
 import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+   GoogleAuthProvider,
+   signInWithPopup,
+   signOut,
+   getAuth,
+   createUserWithEmailAndPassword,
+   signInWithEmailAndPassword
 } from 'firebase/auth';
 
 class GoogleAuthOperations {
-  constructor({
-    saveCredentialsInLocalStorage = true,
-    authCredentialLocalStorageKey = 'authCredential'
-  } = {}) {
-    this.saveCredentialsInLocalStorage = saveCredentialsInLocalStorage;
-    this.authCredentialLocalStorageKey = authCredentialLocalStorageKey;
-  }
-  
-  loginWithGoogleAccountPopup() {
-    return new Promise((resolve, reject) => {
-      const provider = new GoogleAuthProvider()
-		console.log(provider)
-      signInWithPopup(auth, provider)
-        .then((loginResult) => {
-          resolve(loginResult?.user)
-			  if (loginResult?.user){
-				  localStorage.setItem('user', JSON.stringify(loginResult?.user));
-			  }
-			//   let credential = provider.credentialFromResult(loginResult);
-			//   console.log(credential)
-			//   localStorage.setItem('authCredential', JSON.stringify(credential));
-        })
-        .catch((error) => {
-          reject(error)
-          // const errorCode = error.code;
-          // const errorMessage = error.message;
-        })
-    })
-  }
-  signUpWithWithEmailAndPassword({ email, password }) {
-    return new Promise((resolve, reject) => {
-      // if (!email || !password) reject(false)
-      // else {
-        const auth = getAuth()
-		  console.log('auth', auth)
-		  console.log('email, password: ', email, password)
-        createUserWithEmailAndPassword(auth, email, password)
-          .then((loginResult) => {
-            resolve(loginResult?.user)
-				console.log('loginResult in createUserWithEmail: ', loginResult)
-          })
-          .catch((error) => {
-            reject(error)
-            // const errorCode = error.code;
-            // const errorMessage = error.message;
-          })
-      // }
-    })
-  }
-  signInWithWithEmailAndPassword({ email, password }) {
-    return new Promise((resolve, reject) => {
-      if (!email || !password) reject(false)
-      else {
-        const auth = getAuth()
-        signInWithEmailAndPassword(auth, email, password)
-          .then((loginResult) => {
-            resolve(loginResult?.user)
-          })
-          .catch((error) => {
-            reject(error)
-            // const errorCode = error.code;
-            // const errorMessage = error.message;
-          })
-      }
-    })
-  }
+   constructor({
+      saveCredentialsInLocalStorage = true,
+      authCredentialLocalStorageKey = 'authCredential'
+   } = {}) {
+      this.saveCredentialsInLocalStorage = saveCredentialsInLocalStorage;
+      this.authCredentialLocalStorageKey = authCredentialLocalStorageKey;
+   }
 
-  logout() {
-    return new Promise((resolve, reject) => {
-      signOut(auth)
-        .then(() => {
-          localStorage.removeItem(this.authCredentialLocalStorageKey);
-          resolve(true);
-        })
-        .catch((error) => {
-          reject(error);
-        })
-    })
-  }
+   loginWithGoogleAccountPopup() {
+      return new Promise((resolve, reject) => {
+         const provider = new GoogleAuthProvider();
+         signInWithPopup(auth, provider)
+            .then((loginResult) => {
+               console.log(loginResult);
+               resolve(loginResult?.user);
+               if (loginResult?.user) {
+                  localStorage.setItem('user', JSON.stringify(loginResult?.user));
+               }
+               let credential = provider.credentialFromResult(loginResult);
+               console.log('cerdential: ', credential);
+               localStorage.setItem('authCredential', JSON.stringify(credential));
+            })
+            .catch((error) => {
+               reject(error);
+               // const errorCode = error.code;
+               // const errorMessage = error.message;
+            });
+      });
+   }
+   signUpWithWithEmailAndPassword(email, password) {
+      return new Promise((resolve, reject) => {
+         if (!email || !password) reject(false);
+         else {
+            const auth = getAuth();
+            createUserWithEmailAndPassword(auth, email, password)
+               .then((loginResult) => {
+                  resolve(loginResult?.user);
+                  if (loginResult?.user) {
+                     localStorage.setItem('user', JSON.stringify(loginResult?.user));
+                  }
+                  // console.log('loginResult in createUserWithEmail: ', loginResult)
+               })
+               .catch((error) => {
+                  console.log(error.message);
+                  reject(error);
+                  // const errorCode = error.code;
+                  // const errorMessage = error.message;
+               });
+         }
+      });
+   }
+   signInWithWithEmailAndPassword(email, password) {
+      return new Promise((resolve, reject) => {
+         if (!email || !password) reject(false);
+         else {
+            const auth = getAuth();
+            signInWithEmailAndPassword(auth, email, password)
+               .then((loginResult) => {
+                  resolve(loginResult?.user);
+                  if (loginResult?.user) {
+                     localStorage.setItem('user', JSON.stringify(loginResult?.user));
+                  }
+               })
+               .catch((error) => {
+                  reject(error);
+                  // const errorCode = error.code;
+                  const errorMessage = error.message;
+               });
+         }
+      });
+   }
+
+   logout() {
+      return new Promise((resolve, reject) => {
+         signOut(auth)
+            .then(() => {
+               localStorage.removeItem(this.authCredentialLocalStorageKey);
+               resolve(true);
+            })
+            .catch((error) => {
+               reject(error);
+            });
+      });
+   }
 }
 
-export default new GoogleAuthOperations(import.meta.VITE_SAVE_CREDENTIALS_IN_LOCAL_STORE)
+export default new GoogleAuthOperations(import.meta.VITE_SAVE_CREDENTIALS_IN_LOCAL_STORE);
