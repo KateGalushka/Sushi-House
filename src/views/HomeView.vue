@@ -3,7 +3,9 @@
     <section class="wrapper">
       <div class="hero">
         <div class="hero__content">
-          <h1>Найсмачніші суші у твоєму місті</h1>
+			<transition name="title" appear>
+				<h1>Найсмачніші суші у твоєму місті</h1>
+			</transition>
           <p>Замовляйте улюблені страви онлайн</p>
           <div class="hero__btns">
             <button
@@ -127,4 +129,21 @@
       margin: 0 auto;
     }
   }
+
+  .title-enter-from,
+   .title-leave-to {
+       transform: translateY(-50px);
+		 opacity: 0;
+   }
+
+   .title-enter-active,
+   .title-leave-active {
+      transition: all 0.5s ease;
+   }
+
+   .title-enter-to,
+   .title-leave-from {
+      opacity: 1;
+      transform: translateY(0);
+   }
 </style>

@@ -143,28 +143,32 @@
       return emailRegExp.test(email.value) && password.value?.length >=6;
    });
 
-   function registerWithEmailAndPassword(email, password) {
-      signUpWithWithEmailAndPassword(email, password).then(() => {
+   async function registerWithEmailAndPassword(email, password) {
+      let res = await signUpWithWithEmailAndPassword(email, password);
+		if (res) {
          router.push({
             name: 'home'
          });
-      });
+		} 
    }
 
-   function loginWithEmailAndPassword(email, password) {
-      signInWithWithEmailAndPassword(email, password).then(() => {
+   async function loginWithEmailAndPassword(email, password) {
+      let res = await signInWithWithEmailAndPassword(email, password);
+		console.log('in login page: ', res);
+		if (res) {
          router.push({
             name: 'home'
          });
-      });
+		}
    }
 
-   function loginWithGoogle() {
-      loginWithGoogleAccount().then(() => {
+   async function loginWithGoogle() {
+      let res = await loginWithGoogleAccount();
+		if (res) {
          router.push({
             name: 'home'
          });
-      });
+		}
    }
 </script>
 

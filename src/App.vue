@@ -1,20 +1,36 @@
 <script setup>
-	import { RouterView } from 'vue-router';
+   import { RouterView } from 'vue-router';
+   import { useRouter } from 'vue-router';
+   import { ref } from 'vue';
+
+   const router = useRouter();
+   const transitionKey = ref(router.path);
 </script>
 
 <template>
-	 <RouterView />
+   <router-view v-slot="{ Component }">
+      <transition name="fade">
+         <component
+            :is="Component"
+            :key="transitionKey"
+         />
+      </transition>
+   </router-view>
 </template>
 
 <style lang="scss">
+   .fade-enter-from,
+   .fade-leave-to {
+      opacity: 0;
+   }
 
-// body { 
-// 	font-family: $font-body;
-// 	background-image: url('@/assets/images/bg.webp');
-// 	background-color: $bg-color1;
-// 	color: $text-color;
-// 	font-size: 1rem;
-// 	font-size: clamp(0.875rem, 0.833rem + 0.2083vw, 1rem);
-// }
+   .fade-enter-active,
+   .fade-leave-active {
+      transition: all 0.3s ease;
+   }
 
+   .fade-enter-to,
+   .fade-leave-from {
+      opacity: 1;
+   }
 </style>

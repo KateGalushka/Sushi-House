@@ -1,34 +1,35 @@
 <template>
-   <nav-bar />
-   <div class="wrapper notFound>">
-      <div class="notFound__container">
-         <div class="notFound__4">4</div>
-         <div class="notFound__img">
-            <img
-               src="@/assets/images/logo/circle.png"
-               alt="Image"
-            />
+   <div>
+      <nav-bar />
+      <div class="wrapper notFound>">
+         <div class="notFound__container">
+            <div class="notFound__4">4</div>
+            <div class="notFound__img">
+               <img
+                  src="@/assets/images/logo/circle.png"
+                  alt="Image"
+               />
+            </div>
+            <div class="notFound__4">4</div>
          </div>
-         <div class="notFound__4">4</div>
+         <div class="notFound__text">
+            <p class="notFound__text-oops">От халепа...</p>
+            <p class="notFound__text-text">
+               <b>Сторінку не знайдено!</b>
+            </p>
+            <p class="notFound__text-text">
+               Неправильно набрано адресу або такої сторінки на сайті більше не існує.
+            </p>
+         </div>
+         <div class="notFound__button-back">
+            <RouterLink
+               :to="{ name: 'home' }"
+               class="button"
+            >
+               Назад на головну
+            </RouterLink>
+         </div>
       </div>
-      <div class="notFound__text">
-         <p class="notFound__text-oops">От халепа...</p>
-         <p class="notFound__text-text">
-            <b>Сторінку не знайдено!</b>
-         </p>
-         <p class="notFound__text-text">
-            Неправильно набрано адресу або такої сторінки на сайті більше не існує.
-         </p>
-      </div>
-      <div class="notFound__button-back">
-         <RouterLink
-            :to="{ name: 'home' }"
-            class="button"
-         >
-				Назад на головну
-			</RouterLink>
-		</div>
-     
    </div>
 </template>
 
@@ -49,13 +50,13 @@
       &__4 {
          font-size: clamp(6.5rem, -1.1111rem + 35.5556vw, 10rem);
          font-family: $font-title1;
-			font-weight: 600;
+         font-weight: 600;
       }
       &__img {
          max-width: toRem(125);
-			outline: .25rem solid $text-color;
-			outline-offset: 3px;
-			border-radius: 50%;
+         outline: 0.25rem solid $text-color;
+         outline-offset: 3px;
+         border-radius: 50%;
          img {
             width: 100%;
             animation: rotateCircle 3s linear infinite;
@@ -84,9 +85,9 @@
       &__button-back {
          text-align: center;
          margin: 2em auto;
-			a {
-				display: inline-block;
-			}
+         a {
+            display: inline-block;
+         }
       }
    }
    @keyframes rotateCircle {

@@ -7,9 +7,10 @@ export const notify = (type, message) => {
     })
   } else if (type === 'error') {
     toast.error(message, {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 2000
-    })
+       position: toast.POSITION.TOP_CENTER,
+       autoClose: false,
+       closeOnClick: true
+    });
   } else if (type === 'warning') {
     toast.warning(message, {
       position: toast.POSITION.TOP_CENTER,

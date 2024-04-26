@@ -8,6 +8,7 @@ import {
    signInWithEmailAndPassword
 } from 'firebase/auth';
 
+
 class GoogleAuthOperations {
    constructor({
       saveCredentialsInLocalStorage = true,
@@ -22,13 +23,13 @@ class GoogleAuthOperations {
          const provider = new GoogleAuthProvider();
          signInWithPopup(auth, provider)
             .then((loginResult) => {
-               console.log(loginResult);
+               // console.log(loginResult);
                resolve(loginResult?.user);
                if (loginResult?.user) {
                   localStorage.setItem('user', JSON.stringify(loginResult?.user));
                }
-               let credential = provider.credentialFromResult(loginResult);
-               console.log('cerdential: ', credential);
+               let credential = GoogleAuthProvider.credentialFromResult(loginResult);
+               console.log('credential: ', credential);
                localStorage.setItem('authCredential', JSON.stringify(credential));
             })
             .catch((error) => {
@@ -38,6 +39,23 @@ class GoogleAuthOperations {
             });
       });
    }
+	loginWithCredential() {
+			return new Promise((resolve, reject) => {
+				let credential = localStorage.getItem('authCredential');
+				if (credential) {
+					credential = JSON.parse(credential);
+					const token = GoogleAuthProvider.credential(credential.idToken);
+
+					signInWithCredential(auth, token)
+						.then((loginResult) => {
+							resolve(loginResult);
+						})
+						.catch((error) => {
+							reject(false);
+						});
+				} else resolve(false)
+			})
+		}
    signUpWithWithEmailAndPassword(email, password) {
       return new Promise((resolve, reject) => {
          if (!email || !password) reject(false);
@@ -75,7 +93,7 @@ class GoogleAuthOperations {
                .catch((error) => {
                   reject(error);
                   // const errorCode = error.code;
-                  const errorMessage = error.message;
+                  // const errorMessage = error.message;
                });
          }
       });

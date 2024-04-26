@@ -3,6 +3,7 @@ import { defineStore, storeToRefs } from 'pinia';
 import { useGeneralStore } from './general';
 import { useUsersStore } from './users';
 import authOperations from './helpers/GoogleAuthOperations.js';
+import { notify } from './helpers/toastify';
 
 export const useAuthStore = defineStore('auth', () => {
    const generalStore = useGeneralStore();
@@ -16,68 +17,88 @@ export const useAuthStore = defineStore('auth', () => {
 
    const getUser = computed(() => authedUser.value);
 
-   async function signUpWithWithEmailAndPassword(email, password) {
-      generalApiOperation({
-         operation: () => authOperations.signUpWithWithEmailAndPassword(email, password)
-      }).then(async (res) => {
-         authedUser.value = res;
-         console.log('user in auth: ', authedUser.value);
+   const handleLoginErrors = (errorMsg) => {
+      if (errorMsg == 'Firebase: Error (auth/email-already-in-use).') {
+         notify('error', 'Користувач вже зареєстрований - будь ласка, увійдіть');
+      }
+      if (errorMsg == 'Firebase: Error (auth/invalid-credential).') {
+         notify('error', 'Користувача не знайдено або дані введені неправильно!');
+      }
+   };
 
-         await users_store.addUserWithCustomId({
-            id: authedUser?.value?.uid,
-            data: {
-               email,
-               cart: []
-            }
+   async function signUpWithWithEmailAndPassword(email, password) {
+      try {
+         let signUpResult = await generalApiOperation({
+            operation: () => authOperations.signUpWithWithEmailAndPassword(email, password),
+            successCallback: () => notify('success', 'Ви успішно зареєструвались!'),
+            errorCallBack: (errorMsg) => handleLoginErrors(errorMsg)
          });
-      });
+         console.log('signUp result: ', signUpResult);
+         if (signUpResult) {
+            authedUser.value = signUpResult;
+            await users_store.addUserWithCustomId({
+               id: authedUser?.value?.uid,
+               data: {
+                  email,
+                  cart: []
+               }
+            });
+         }
+         return signUpResult;
+      } catch (error) {
+         console.log(error.message);
+         reject(error);
+      }
    }
 
    async function signInWithWithEmailAndPassword(email, password) {
-      return new Promise((resolve, reject) => {
-         generalApiOperation({
-            operation: () => authOperations.signInWithWithEmailAndPassword(email, password)
-         })
-            .then((res) => {
-               authedUser.value = res;
-               console.log('user: ', authedUser.value);
-               users_store
-                  .loadUserById(authedUser.value.uid)
-                  .then(() => {
-                     resolve(res);
-                     console.log('from users_store: ', res);
-                  })
-                  .catch((error) => reject(error));
-            })
-            .catch((error) => reject(error));
-      });
+      try {
+         let signInResult = await generalApiOperation({
+            operation: () => authOperations.signInWithWithEmailAndPassword(email, password),
+            successCallback: () => notify('success', 'Ви успішно увійшли до свого акаунту!'),
+            errorCallBack: (errorMsg) => handleLoginErrors(errorMsg)
+         });
+         if (signInResult) {
+            authedUser.value = signInResult;
+            console.log('signInResult: ', signInResult);
+            await users_store.loadUserById(authedUser.value.uid);
+         }
+         return signInResult;
+      } catch {
+         (error) => {
+            console.log(error.message);
+            reject(error);
+         };
+      }
    }
 
-   function loginWithGoogleAccount() {
-      return new Promise((resolve, reject) => {
-         generalApiOperation({
-            operation: () => authOperations.loginWithGoogleAccountPopup()
-         })
-            .then((res) => {
-               authedUser.value = res;
-               console.log('user: ', res);
+   async function loginWithGoogleAccount() {
+      try {
+         let loginResult = await generalApiOperation({
+            operation: () => authOperations.loginWithGoogleAccountPopup(),
+            successCallback: () => notify('success', 'Ви успішно увійшли!'),
+            errorCallback: () => notify('error', 'Щось пішло не так...')
+         });
+         if (loginResult) {
+            authedUser.value = loginResult;
+            // console.log('user: ', loginResult);
 
-               users_store
-                  .addUserWithCustomId({
-                     id: authedUser?.value?.uid,
-                     data: {
-                        email: authedUser?.value?.email,
-                        name: authedUser?.value?.displayName
-                     }
-                  })
-                  .then(() => {
-                     users_store.loadUserById(authedUser.value.uid).then(() => {
-                        resolve(res);
-                     });
-                  });
-            })
-            .catch((error) => reject(error));
-      });
+            await users_store.addUserWithCustomId({
+               id: authedUser?.value?.uid,
+               data: {
+                  email: authedUser?.value?.email,
+                  name: authedUser?.value?.displayName
+               }
+            });
+            await users_store.loadUserById(authedUser.value.uid);
+         }
+         return loginResult;
+      } catch {
+         (error) => {
+            console.log(error.message);
+            reject(error);
+         };
+      }
    }
 
    function logOut() {

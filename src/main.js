@@ -26,13 +26,11 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.use(
-	Vue3Toasity,
-  {
+app.use(Vue3Toasity, {
    autoClose: 1000,
-	// multiple: false,	
-  }
-)
+   dangerouslyHTMLString: true
+   // multiple: false,
+});
 
 app.component('font-awesome-icon', FontAwesomeIcon)
 

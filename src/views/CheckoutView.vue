@@ -213,6 +213,10 @@
   const orders_store = useOrdersStore()
   const { currentOrderSubmit } = storeToRefs(orders_store)
 
+  import {useAuthStore} from '@/stores/auth';
+  const auth_store = useAuthStore();
+  const {authedUser} = auth_store;
+
   const form = ref(null)
 
   const deliveryMethod = ref('pickup')
@@ -297,7 +301,7 @@
 	   }
     await orders_store.addOrder(formData)
 
-    console.log('currentOrderSubmit in checkout: ', currentOrderSubmit.value)
+   //  console.log('currentOrderSubmit in checkout: ', currentOrderSubmit.value)
     if (currentOrderSubmit.value) {
       clearData()
       clearLocalStorage()
@@ -319,8 +323,9 @@
   }
 
   onMounted(() => {
-    document.addEventListener('keydown', handleKeyDown)
-  })
+    document.addEventListener('keydown', handleKeyDown);
+	 checkIfUserIsAuthed();
+  });
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && event.target.tagName === 'INPUT') {
@@ -331,6 +336,14 @@
         formArray[index + 1].focus()
       }
     }
+  }
+
+  const checkIfUserIsAuthed = () => {
+	if (authedUser) {
+		let userInStorage = JSON.parse(localStorage.getItem('user'));
+		user.value.name = userInStorage.displayName;
+		user.value.email = userInStorage.email;
+	}
   }
 </script>
 
