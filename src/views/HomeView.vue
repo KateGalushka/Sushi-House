@@ -28,6 +28,7 @@
                <img
                   src="@/assets/images/home2.webp"
                   alt="sushi"
+						loading="lazy"
                />
             </div>
          </div>
