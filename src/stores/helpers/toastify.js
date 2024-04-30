@@ -19,7 +19,7 @@ export const notify = (type, message) => {
    } else {
       toast(message, {
          position: toast.POSITION.TOP_CENTER,
-         autoClose: 2000
+         autoClose: 1500
       });
    }
 };

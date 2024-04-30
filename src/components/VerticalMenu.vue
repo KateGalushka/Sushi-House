@@ -101,10 +101,6 @@
          flex-direction: column;
          // gap: 0.5rem;
 
-         &:hover {
-            //   width: 100%;
-         }
-
          @media (max-width: toRem(1390)) {
             flex-direction: row;
             flex-wrap: nowrap;
@@ -114,7 +110,7 @@
             -webkit-overflow-scrolling: touch;
 
             &::-webkit-scrollbar {
-               display: none;
+               // display: none;
             }
          }
       }

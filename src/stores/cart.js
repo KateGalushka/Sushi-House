@@ -42,7 +42,7 @@ export const useCartStore = defineStore('cart', () => {
 	
 	function addItemToCart(dishId){
 		isAnimated.value = true;
-		setTimeout(() => isAnimated.value = false, 3000);
+		setTimeout(() => isAnimated.value = false, 1500);
 		let index = this.userCart.findIndex(item => item.id === dishId);
 		if (index !== -1) {
 			this.userCart[index].quantity += 1;
@@ -62,6 +62,8 @@ export const useCartStore = defineStore('cart', () => {
 	
 	
 	function decreaseQuantity(dishId) {
+		isAnimated.value = true;
+      setTimeout(() => (isAnimated.value = false), 1500);
 		let index = this.userCart.findIndex(item => item.id === dishId);
 		if (index !== -1) {
 			this.userCart[index].quantity -=1;
@@ -77,6 +79,8 @@ export const useCartStore = defineStore('cart', () => {
    };
 
   	function increaseQuantity(dishId) {
+		isAnimated.value = true;
+      setTimeout(() => (isAnimated.value = false), 1500);
 		let index = this.userCart.findIndex(item => item.id === dishId);
 		if (index !== -1) {
 			this.userCart[index].quantity +=1;

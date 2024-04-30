@@ -26,7 +26,7 @@
             </div>
             <div class="hero__img">
                <img
-                  src="@/assets/images/home.png"
+                  src="@/assets/images/home2.webp"
                   alt="sushi"
                />
             </div>
@@ -103,6 +103,10 @@
             font-weight: 700;
             line-height: 1.15;
          }
+			p {
+				font-size: 1rem;
+				padding: .5rem 0;
+			}
       }
       &__btns {
          display: flex;

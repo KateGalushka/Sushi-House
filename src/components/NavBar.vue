@@ -228,9 +228,9 @@
    @media (max-width: toRem(768)) {
       .navbar__menu {
          height: 23.75rem;
-         a {
-            font-size: 1rem;
-         }
+         // a {
+         //    font-size: 1rem;
+         // }
       }
    }
 

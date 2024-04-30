@@ -6,7 +6,7 @@
             <div class="notFound__4">4</div>
             <div class="notFound__img">
                <img
-                  src="@/assets/images/logo/circle.png"
+                  src="@/assets/images/logo/circle.webp"
                   alt="Image"
                />
             </div>
