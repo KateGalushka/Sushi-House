@@ -32,7 +32,7 @@ export const useGeneralStore = defineStore('general', () => {
     startLoading();
     try {
       const res = await operation();
-		console.log('in general Store: ', res)
+		// console.log('in general Store: ', res)
       if (successCallback) successCallback(res);
       return res;
     } catch (error) {

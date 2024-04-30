@@ -86,7 +86,7 @@
       }
    }
 
-   @media (max-width: 768px) {
+   @media (max-width: toRem(768)) {
       .user-profile,
       .login-btn {
          font-size: 1rem;

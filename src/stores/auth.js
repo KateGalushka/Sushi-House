@@ -26,7 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
    };
 
-   async function signUpWithWithEmailAndPassword(email, password) {
+   async function signUpWithWithEmailAndPassword(email, password, user) {
       try {
          let signUpResult = await generalApiOperation({
             operation: () => authOperations.signUpWithWithEmailAndPassword(email, password),
@@ -40,7 +40,8 @@ export const useAuthStore = defineStore('auth', () => {
                id: authedUser?.value?.uid,
                data: {
                   email,
-                  cart: []
+						name: user.name,
+						phone: user.phone,
                }
             });
          }
@@ -60,13 +61,13 @@ export const useAuthStore = defineStore('auth', () => {
          });
          if (signInResult) {
             authedUser.value = signInResult;
-            console.log('signInResult: ', signInResult);
+            // console.log('signInResult: ', signInResult);
             await users_store.loadUserById(authedUser.value.uid);
          }
          return signInResult;
       } catch {
          (error) => {
-            console.log(error.message);
+            // console.log(error.message);
             reject(error);
          };
       }
@@ -95,7 +96,26 @@ export const useAuthStore = defineStore('auth', () => {
          return loginResult;
       } catch {
          (error) => {
-            console.log(error.message);
+            reject(error);
+         };
+      }
+   }
+
+	async function loginWithCredential() {
+      try {
+         let loginResult = await generalApiOperation({
+            operation: () => authOperations.loginWithCredential(),
+            // successCallback: () => notify('success', 'Ви успішно увійшли!'),
+            errorCallback: () => notify('error', 'Щось пішло не так...')
+         });
+         if (loginResult) {
+            authedUser.value = loginResult;
+            // console.log('loginResult in auth: ', loginResult);
+            await users_store.loadUserById(authedUser.value.uid);
+         }
+         return loginResult?.user;
+      } catch {
+         (error) => {
             reject(error);
          };
       }
@@ -118,6 +138,7 @@ export const useAuthStore = defineStore('auth', () => {
       signUpWithWithEmailAndPassword,
       signInWithWithEmailAndPassword,
       loginWithGoogleAccount,
+		loginWithCredential,
       logOut,
       getAuthData,
       getUser,

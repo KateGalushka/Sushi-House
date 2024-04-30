@@ -5,9 +5,9 @@ import {
    signOut,
    getAuth,
    createUserWithEmailAndPassword,
-   signInWithEmailAndPassword
+   signInWithEmailAndPassword,
+   signInWithCredential
 } from 'firebase/auth';
-
 
 class GoogleAuthOperations {
    constructor({
@@ -29,7 +29,6 @@ class GoogleAuthOperations {
                   localStorage.setItem('user', JSON.stringify(loginResult?.user));
                }
                let credential = GoogleAuthProvider.credentialFromResult(loginResult);
-               console.log('credential: ', credential);
                localStorage.setItem('authCredential', JSON.stringify(credential));
             })
             .catch((error) => {
@@ -39,23 +38,25 @@ class GoogleAuthOperations {
             });
       });
    }
-	loginWithCredential() {
-			return new Promise((resolve, reject) => {
-				let credential = localStorage.getItem('authCredential');
-				if (credential) {
-					credential = JSON.parse(credential);
-					const token = GoogleAuthProvider.credential(credential.idToken);
+   loginWithCredential() {
+      return new Promise((resolve, reject) => {
+         let credential = localStorage.getItem('authCredential');
+         if (credential) {
+            credential = JSON.parse(credential);
+            const token = GoogleAuthProvider.credential(credential.idToken);
+            const auth = getAuth();
 
-					signInWithCredential(auth, token)
-						.then((loginResult) => {
-							resolve(loginResult);
-						})
-						.catch((error) => {
-							reject(false);
-						});
-				} else resolve(false)
-			})
-		}
+            signInWithCredential(auth, token)
+               .then((loginResult) => {
+                  resolve(loginResult?.user);
+               })
+               .catch((error) => {
+                  // console.error('Error while logging in with stored credential:', error);
+                  reject(false);
+               });
+         } else resolve(false);
+      });
+   }
    signUpWithWithEmailAndPassword(email, password) {
       return new Promise((resolve, reject) => {
          if (!email || !password) reject(false);
@@ -70,7 +71,6 @@ class GoogleAuthOperations {
                   // console.log('loginResult in createUserWithEmail: ', loginResult)
                })
                .catch((error) => {
-                  console.log(error.message);
                   reject(error);
                   // const errorCode = error.code;
                   // const errorMessage = error.message;

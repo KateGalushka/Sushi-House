@@ -1,15 +1,15 @@
 <script setup>
+   import { ref } from 'vue';
    import { RouterView } from 'vue-router';
    import { useRouter } from 'vue-router';
-   import { ref } from 'vue';
-
    const router = useRouter();
    const transitionKey = ref(router.path);
+
 </script>
 
 <template>
    <router-view v-slot="{ Component }">
-      <transition name="fade">
+      <transition name="fade" mode="out-in">
          <component
             :is="Component"
             :key="transitionKey"

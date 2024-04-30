@@ -34,12 +34,15 @@ export const useCartStore = defineStore('cart', () => {
 			}
 		})
 	});
+	const isAnimated = ref(false);
 
 	const saveCartToLocalStorage = () => {
 		localStorage.setItem('cart', JSON.stringify(userCart.value));
 	};
 	
 	function addItemToCart(dishId){
+		isAnimated.value = true;
+		setTimeout(() => isAnimated.value = false, 3000);
 		let index = this.userCart.findIndex(item => item.id === dishId);
 		if (index !== -1) {
 			this.userCart[index].quantity += 1;
@@ -107,6 +110,7 @@ export const useCartStore = defineStore('cart', () => {
 		isItemInCart,
 		cartTotalSum,
 		cartWithTitles,
+		isAnimated,
 		
 		addItemToCart,
 		deleteItemFromCart,

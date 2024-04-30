@@ -69,7 +69,7 @@ class DbOperations {
   addItemToArray(id, arrayProperty, value) {
     return new Promise((resolve, reject) => {
       this.getItemById(id).then((item) => {
-        if (item.appointments) {
+        if (item.cart) {
           updateDoc(doc(this.dbCollection, id), {
             [arrayProperty]: arrayUnion(value)
           })
@@ -160,18 +160,18 @@ class DbOperations {
     })
   };
 
-  loadDocumentsFromIdsList(idsList) {
-    const q = query(this.dbCollection, where(documentId(), 'in', idsList))
-    return new Promise((resolve, reject) => {
-      getDocs(q)
-        .then((querySnapshot) => {
-          resolve(this.getListFromSnapshot(querySnapshot))
-        })
-        .catch((error) => {
-          reject(error)
-        })
-    })
-  };
+//   loadDocumentsFromIdsList(idsList) {
+//     const q = query(this.dbCollection, where(documentId(), 'in', idsList))
+//     return new Promise((resolve, reject) => {
+//       getDocs(q)
+//         .then((querySnapshot) => {
+//           resolve(this.getListFromSnapshot(querySnapshot))
+//         })
+//         .catch((error) => {
+//           reject(error)
+//         })
+//     })
+//   };
 }
 
 export default DbOperations

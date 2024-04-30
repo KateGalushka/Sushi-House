@@ -37,9 +37,14 @@
                         id="passwordForLogin"
                         name="passwordForLogin"
                         v-model="passwordForLogin"
-								@focus="showRemark=true"
+                        @focus="showRemark = true"
                      />
-							<p v-if="showRemark" class="password-remark">Пароль повинен містити мінімум 6 знаків</p>
+                     <p
+                        v-if="showRemark"
+                        class="password-remark"
+                     >
+                        Пароль повинен містити мінімум 6 знаків
+                     </p>
                      <button
                         type="submit"
                         class="button login-button"
@@ -79,9 +84,30 @@
                         name="password"
                         minlength="6"
                         v-model="password"
-								@focus="showRemark=true"
+                        @focus="showRemark = true"
                      />
-							<p v-if="showRemark" class="password-remark">Пароль повинен містити мінімум 6 знаків</p>
+                     <p
+                        v-if="showRemark"
+                        class="password-remark"
+                     >
+                        Пароль повинен містити мінімум 6 знаків
+                     </p>
+                     <label for="userName">Введіть ім'я</label>
+                     <input
+                        type="text"
+                        id="userName"
+                        name="userName"
+                        v-model="userName"
+                     />
+                     <label for="userPhone">Введіть свій контактний телефон</label>
+                     <input
+                        type="tel"
+                        placeholder="(XXX)-XXX-XX-XX"
+                        maxlength="15"
+                        id="userPhone"
+                        name="userPhone"
+                        v-model="userPhone"
+                     />
                      <button
                         type="submit"
                         class="button login-button"
@@ -112,7 +138,7 @@
 </template>
 
 <script setup>
-   import { ref, computed } from 'vue';
+   import { ref, computed, watch, onMounted } from 'vue';
    import { useAuthStore } from '@/stores/auth';
    const authStore = useAuthStore();
 
@@ -132,43 +158,66 @@
 
    const email = ref(null);
    const password = ref(null);
-	const showRemark = ref(false);
+   const showRemark = ref(false);
+   const userName = ref('');
+   const userPhone = ref('');
 
    const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+   const phoneRegExp = /^\(0\d{2}\)[ -]?\d{3}[ -]?\d{2}[- ]?\d{2}$/;
+   const isPhoneNumberValid = computed(() => {
+      return phoneRegExp.test(userPhone.value);
+   });
+
+   watch(userPhone, (newVal, oldVal) => {
+      if (newVal.length > oldVal.length) {
+         userPhone.value = newVal
+            .replace(/\D/g, '')
+            .replace(/^(\d{3})(\d{3})(\d{2})(\d{2})$/g, `($1) $2-$3-$4`);
+      }
+   });
 
    const isDataValidForLogin = computed(() => {
-      return emailRegExp.test(emailForLogin.value) && passwordForLogin.value?.length >=6;
+      return emailRegExp.test(emailForLogin.value) && passwordForLogin.value?.length >= 6;
    });
    const isDataValidForSignUp = computed(() => {
-      return emailRegExp.test(email.value) && password.value?.length >=6;
+      return (
+         emailRegExp.test(email.value) &&
+         password.value?.length >= 6 &&
+         userName.value &&
+         isPhoneNumberValid.value
+      );
    });
 
    async function registerWithEmailAndPassword(email, password) {
-      let res = await signUpWithWithEmailAndPassword(email, password);
-		if (res) {
+      const user = {
+         name: userName.value,
+         phone: userPhone.value
+      };
+      let res = await signUpWithWithEmailAndPassword(email, password, user);
+      if (res) {
          router.push({
             name: 'home'
          });
-		} 
+      }
    }
 
    async function loginWithEmailAndPassword(email, password) {
       let res = await signInWithWithEmailAndPassword(email, password);
-		console.log('in login page: ', res);
-		if (res) {
+      console.log('in login page: ', res);
+      if (res) {
          router.push({
             name: 'home'
          });
-		}
+      }
    }
 
    async function loginWithGoogle() {
       let res = await loginWithGoogleAccount();
-		if (res) {
+      if (res) {
          router.push({
             name: 'home'
          });
-		}
+      }
    }
 </script>
 
@@ -201,15 +250,15 @@
          }
       }
       &__content {
-			margin-bottom: 1rem;
+         margin-bottom: 1rem;
          &-form {
-				max-width: clamp(toRem(300), toRem(650), 95%);
-				margin-inline: auto;
+            max-width: clamp(toRem(300), toRem(650), 95%);
+            margin-inline: auto;
             // flex: 1 0 45%;
             fieldset {
                border: 1px solid $text-color;
                padding: 1.5rem 2rem;
-					box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+               box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
                &:hover,
                &:focus {
                   border: 2px solid $color2;
@@ -234,14 +283,14 @@
                border-radius: 0.5rem;
                padding: 0.5rem;
             }
-				.login-button {
-					margin-top: 1.25rem;
-				}
+            .login-button {
+               margin-top: 1.25rem;
+            }
          }
-			&-checkbox {
+         &-checkbox {
             padding: 1rem;
-				margin: .5em auto;
-				width: max-content;
+            margin: 0.5em auto;
+            width: max-content;
             display: grid;
             grid-template-columns: 1em auto;
             gap: 1.25em;
@@ -277,7 +326,7 @@
             }
          }
       }
-      
+
       &__google {
          text-align: center;
          p {
@@ -294,8 +343,9 @@
             width: 35px;
          }
       }
-		.password-remark {
-			font-size: 0.75rem;
-		}
+      .password-remark {
+         font-size: 0.75rem;
+         padding-bottom: 1rem;
+      }
    }
 </style>

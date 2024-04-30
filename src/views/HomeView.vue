@@ -1,139 +1,150 @@
 <template>
-  <main-master-page>
-    <section class="wrapper">
-      <div class="hero">
-        <div class="hero__content">
-			<transition name="title" appear>
-				<h1>Найсмачніші суші у твоєму місті</h1>
-			</transition>
-          <p>Замовляйте улюблені страви онлайн</p>
-          <div class="hero__btns">
-            <button
-              class="button"
-              @click="scrollToOrderRules"
-            >
-              Як замовити?
-            </button>
-            <RouterLink
-              class="button"
-              :to="{ name: 'menu' }"
-              >Перейти до меню</RouterLink
-            >
-          </div>
-        </div>
-        <div class="hero__img">
-          <img
-            src="@/assets/images/home.png"
-            alt="sushi"
-          />
-        </div>
-      </div>
-    </section>
+   <main-master-page>
+      <section class="wrapper">
+         <div class="hero">
+            <div class="hero__content">
+               <transition
+                  name="title"
+                  appear
+               >
+                  <h1>Найсмачніші суші у твоєму місті</h1>
+               </transition>
+               <p>Замовляйте улюблені страви онлайн</p>
+               <div class="hero__btns">
+                  <button
+                     class="button"
+                     @click="scrollToOrderRules"
+                  >
+                     Як замовити?
+                  </button>
+                  <RouterLink
+                     class="button"
+                     :to="{ name: 'menu' }"
+                     >Перейти до меню</RouterLink
+                  >
+               </div>
+            </div>
+            <div class="hero__img">
+               <img
+                  src="@/assets/images/home.png"
+                  alt="sushi"
+               />
+            </div>
+         </div>
+      </section>
 
-    <section
-      class="wrapper rules"
-      ref="orderRulesSection"
-      id="orderRulesSection"
-    >
-      <order-rules />
-    </section>
-    <section
-      class="wrapper about"
-      ref="aboutSection"
-      id="aboutSection"
-    >
-      <about-section />
-    </section>
-    <section class="wrapper map">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2575.299710736952!2d30.119115376820513!3d49.7992328340382!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d342182b0a3fb7%3A0x71c87108a58bd62b!2z0LLRg9C70LjRhtGPINCv0YDQvtGB0LvQsNCy0LAg0JzRg9C00YDQvtCz0L4sINCR0ZbQu9CwINCm0LXRgNC60LLQsCwg0JrQuNGX0LLRgdGM0LrQsCDQvtCx0LsuLCAwOTEwMA!5e0!3m2!1suk!2sua!4v1706791288420!5m2!1suk!2sua" width="1280" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </section>
-  </main-master-page>
+      <section
+         class="wrapper rules"
+         ref="orderRulesSection"
+         id="orderRulesSection"
+      >
+         <order-rules />
+      </section>
+      <section
+         class="wrapper about"
+         ref="aboutSection"
+         id="aboutSection"
+      >
+         <about-section />
+      </section>
+      <section class="wrapper map">
+         <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2575.299710736952!2d30.119115376820513!3d49.7992328340382!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d342182b0a3fb7%3A0x71c87108a58bd62b!2z0LLRg9C70LjRhtGPINCv0YDQvtGB0LvQsNCy0LAg0JzRg9C00YDQvtCz0L4sINCR0ZbQu9CwINCm0LXRgNC60LLQsCwg0JrQuNGX0LLRgdGM0LrQsCDQvtCx0LsuLCAwOTEwMA!5e0!3m2!1suk!2sua!4v1706791288420!5m2!1suk!2sua"
+            width="1280"
+            height="400"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+         ></iframe>
+      </section>
+   </main-master-page>
 </template>
 <script setup>
-  import MainMasterPage from '@/masterPages/MainMasterPage.vue'
-  import OrderRules from '@/components/OrderRules.vue'
-  import AboutSection from '@/components/AboutSection.vue'
+   import MainMasterPage from '@/masterPages/MainMasterPage.vue';
+   import OrderRules from '@/components/OrderRules.vue';
+   import AboutSection from '@/components/AboutSection.vue';
 
-  import { ref } from 'vue'
+   import { ref } from 'vue';
 
-  const orderRulesSection = ref(null)
+   const orderRulesSection = ref(null);
 
-  const scrollToOrderRules = () => {
-    if (orderRulesSection.value) {
-      orderRulesSection.value.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }
-  }
+   const scrollToOrderRules = () => {
+      if (orderRulesSection.value) {
+         orderRulesSection.value.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+   };
 </script>
 
 <style lang="scss" scoped>
-  .hero {
-    display: flex;
-    align-items: center;
-    padding: 1.5rem;
-    gap: 0.5rem;
-    &__img {
-      flex: 1 0 auto;
-      overflow: clip;
-      max-width: 60%;
-      img {
-        object-fit: cover;
-        width: 100%;
-      }
-    }
-    &__content {
+   .hero {
       display: flex;
-      flex-direction: column;
-      gap: 1em;
-
-      h1 {
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: clamp(1.25rem, 0.3333rem + 4.5833vw, 4rem);
-        font-weight: 700;
-        line-height: 1.15;
+      align-items: center;
+      padding: 1.5rem;
+      gap: 0.5rem;
+      &__img {
+         flex: 1 0 auto;
+         overflow: clip;
+         max-width: 60%;
+         img {
+            object-fit: cover;
+            width: 100%;
+         }
       }
-    }
-    &__btns {
-      display: flex;
-      gap: 0.75em;
-      flex-wrap: wrap;
-    }
-    @media (max-width: toRem(1024)) {
-      margin-top: 7.5rem;
-    }
-    // @media (max-width: toRem(640)) {
-    // 	flex-direction: column;
-    // 	justify-content: center;
-    // 	&__content {
-    // 		text-align: center;
-    // 		padding-top: 2rem;
-    // 	}
-    // 	&__btns {
-    // 		margin-inline: auto;
-    // 	}
-    // 	&__img{
-    // 		// transform: rotate(90deg);
-    // 		width: 100%;
-    // 		img {
-    // 			max-height: 250px;
-    // 			object-fit: fill;
-    // 		}
-    // 	}
+      &__content {
+         display: flex;
+         flex-direction: column;
+         gap: 1em;
 
-    // }
-  }
-  .map {
-    iframe {
-      max-width: 100%;
-      width: 100%;
-      margin: 0 auto;
-    }
-  }
+         h1 {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: clamp(1.25rem, 0.3333rem + 4.5833vw, 4rem);
+            font-weight: 700;
+            line-height: 1.15;
+         }
+      }
+      &__btns {
+         display: flex;
+         gap: 0.75em;
+         flex-wrap: wrap;
+      }
+      @media (max-width: toRem(1024)) {
+         margin-top: 7.5rem;
+      }
+      // @media (max-width: toRem(640)) {
+      // 	flex-direction: column;
+      // 	justify-content: center;
+      // 	&__content {
+      // 		text-align: center;
+      // 		padding-top: 2rem;
+      // 	}
+      // 	&__btns {
+      // 		margin-inline: auto;
+      // 	}
+      // 	&__img{
+      // 		// transform: rotate(90deg);
+      // 		width: 100%;
+      // 		img {
+      // 			max-height: 250px;
+      // 			object-fit: fill;
+      // 		}
+      // 	}
 
-  .title-enter-from,
+      // }
+   }
+   .map {
+      iframe {
+         max-width: 100%;
+         width: 100%;
+         margin: 0 auto;
+      }
+   }
+
+   .title-enter-from,
    .title-leave-to {
-       transform: translateY(-50px);
-		 opacity: 0;
+      transform: translateY(-60px);
+      opacity: 0;
    }
 
    .title-enter-active,

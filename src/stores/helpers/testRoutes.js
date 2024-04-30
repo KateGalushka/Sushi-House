@@ -7,7 +7,6 @@ dishesArray.map(dish => categoriesArray.push(dish.category));
 let categoriesSet = new Set(categoriesArray);
 
 function testIfCategoryTitleIsCorrect(categoryTitle) {
-	console.log('categories: ', categoriesSet);
 	return categoriesSet.has(categoryTitle);
 }
 

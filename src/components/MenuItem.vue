@@ -1,12 +1,12 @@
 <template>
   <div class="card">
     <div class="card__img">
-      <img
+      <!-- <img
         v-if="getImagePath(dish.img_name)"
         :src="getImagePath(dish.img_name)"
         width="200"
-      />
-      <!-- <img v-if="dishUrl" :src="dishUrl" :alt="dish.title" width="200"> -->
+      /> -->
+      <img v-if="dishUrl" :src="dishUrl" :alt="dish.title" width="200">
       <img
         v-else
         :src="dummyImagePath"
@@ -59,8 +59,9 @@
     return storage.getImagesPaths.find((path) => path.includes(props.dish.img_name))
   })
   const dummyImagePath = new URL('../assets/images/sushi-illustration.png', import.meta.url).href
-  const getImagePath = (imgPath) =>
-    new URL(`../assets/images/sushi/${imgPath}`, import.meta.url).href
+
+//   const getImagePath = (imgPath) =>
+//     new URL(`../assets/images/sushi/${imgPath}`, import.meta.url).href
 
 
 </script>

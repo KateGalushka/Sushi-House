@@ -15,12 +15,12 @@
 </template>
 
 <script setup>
+   import { onMounted } from 'vue';
+   import { storeToRefs } from 'pinia';
    import NavBar from '@/components/NavBar.vue';
    import VerticalMenu from '@/components/VerticalMenu.vue';
    import FooterComponent from '@/components/FooterComponent.vue';
    import SidebarCart from '@/components/SidebarCart.vue';
-   import { onMounted } from 'vue';
-   import { storeToRefs } from 'pinia';
 
    import { useCartStore } from '@/stores/cart';
    const cart_store = useCartStore();
@@ -30,15 +30,21 @@
    const dishes_store = useDishesStore();
    const { dishesList } = storeToRefs(dishes_store);
 
-   onMounted(async () => {
-      await dishes_store.setDishesList(); //set data from json-file
+   import { useStorageStore } from '@/stores/storage';
+   const storage = useStorageStore();
+   const { setImagePath } = storage;
+
+   onMounted(() => {
+      dishes_store.setDishesList(); //set data from json-file
 
       //get images from storage
       let namesArr = [];
       dishesList.value.map((dish) => namesArr.push(dish.img_name));
       const imagesNamesArray = Array.from(new Set(namesArr));
-      //  console.log('imagesNamesArray: ', imagesNamesArray)
-      //  await imagesNamesArray.forEach((imageName)=> storage.setImagePath(imageName));
+      // console.log('imagesNamesArray: ', imagesNamesArray);
+      imagesNamesArray.forEach(async (imageName) => {
+         await setImagePath(imageName);
+      });
 
       if (localStorage.getItem('cart')) {
          cart_store.userCart = JSON.parse(localStorage.getItem('cart'));
