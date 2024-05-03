@@ -83,6 +83,7 @@
                      <select
                         v-model="dayOfDelivery"
                         name="dayOfDelivery"
+								@change="timeOfDelivery=null"
                      >
                         <option :value="new Date().toLocaleDateString('uk-UA')">Сьогодні</option>
                         <option
@@ -96,7 +97,7 @@
                      <select
                         v-model="timeOfDelivery"
                         name="timeOfDelivery"
-                     >
+								                 >
                         <option
                            selected
                            :value="new Date().toLocaleTimeString('uk-UA')"
@@ -233,12 +234,12 @@
    const currentHour = ref(new Date().getHours());
 
    const hoursArray = computed(() => {
+      // console.log('currentHour: ', currentHour.value);
       let times = [];
-      for (let i = 1; i < 11; i++) {
-         let hour = currentHour.value + i;
-         if (hour < 10 || hour >= 20) {
-            continue;
-         } else {
+      if (dayOfDelivery.value == new Date().toLocaleDateString('uk-UA')) {
+			currentHour.value = new Date().getHours();
+         for (let i = currentHour.value + 1; i < 20; i++) {
+            let hour = i;
             for (let j = 0; j < 60; j += 15) {
                let minutes = j;
                let time = new Date().setHours(hour, minutes);
@@ -250,8 +251,21 @@
                );
             }
          }
-         // console.log('times: ', times)
-      }
+      } else {
+         for (let i = 10; i < 20; i++) {
+            for (let j = 0; j < 60; j += 15) {
+                  let minutes = j;
+                  let time = new Date().setHours(i, minutes);
+                  times.push(
+                     new Date(time).toLocaleTimeString('uk-UA', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                     })
+                  );
+               }
+            }
+         }
+      
       return times;
    });
 
@@ -319,9 +333,9 @@
       localStorage.removeItem('cart');
    };
 
-   onMounted(async() => {
+   onMounted(async () => {
       document.addEventListener('keydown', handleKeyDown);
-		await auth_store.loginWithCredential();
+      await auth_store.loginWithCredential();
       await checkIfUserIsAuthed();
    });
 
@@ -339,13 +353,13 @@
    const checkIfUserIsAuthed = async () => {
       if (authedUser) {
          let userInStorage = localStorage.getItem('user');
-			if (userInStorage) {
-				let userInStorageObj = JSON.parse(userInStorage);
-				let userLoadedFromDB = await users_store.loadUserById(userInStorageObj.uid);
-				user.value.name = userInStorageObj.displayName || userLoadedFromDB.name;
-				user.value.email = userInStorageObj.email;
-				user.value.phone = userLoadedFromDB?.phone ?? null;
-			}
+         if (userInStorage) {
+            let userInStorageObj = JSON.parse(userInStorage);
+            let userLoadedFromDB = await users_store.loadUserById(userInStorageObj.uid);
+            user.value.name = userInStorageObj.displayName || userLoadedFromDB.name;
+            user.value.email = userInStorageObj.email;
+            user.value.phone = userLoadedFromDB?.phone ?? null;
+         }
       }
    };
 </script>

@@ -38,13 +38,15 @@
       dishes_store.setDishesList(); //set data from json-file
 
       //get images from storage
-      let namesArr = [];
-      dishesList.value.map((dish) => namesArr.push(dish.img_name));
-      const imagesNamesArray = Array.from(new Set(namesArr));
-      // console.log('imagesNamesArray: ', imagesNamesArray);
-      imagesNamesArray.forEach(async (imageName) => {
-         await setImagePath(imageName);
-      });
+		if (!storage.getImagesPaths.length){
+			let namesArr = [];
+			dishesList.value.map((dish) => namesArr.push(dish.img_name));
+			const imagesNamesArray = Array.from(new Set(namesArr));
+			// console.log('imagesNamesArray: ', imagesNamesArray);
+			imagesNamesArray.forEach(async (imageName) => {
+				await setImagePath(imageName);
+			});
+		}
 
       if (localStorage.getItem('cart')) {
          cart_store.userCart = JSON.parse(localStorage.getItem('cart'));

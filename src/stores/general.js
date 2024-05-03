@@ -4,6 +4,7 @@ import { notify } from './helpers/toastify';
 
 export const useGeneralStore = defineStore('general', () => {
   const loading = ref(null);
+  const isLoadingToastShown = ref(false);
   const error = ref(null);
   const msg = ref('');
 
@@ -11,10 +12,13 @@ export const useGeneralStore = defineStore('general', () => {
   const hasError = computed(() => error.value);
 
   function setLoading(val) {
-    loading.value = val;
-	 if (val) {
+	loading.value = val;
+	if (val && !isLoadingToastShown.value) {
+		isLoadingToastShown.value = true;
 		notify('', 'Loading...');
-	 }
+	} else if (!val && isLoadingToastShown.value) {
+		isLoadingToastShown.value = false;
+	}
   };
   function setError(val) {
     error.value = val;
