@@ -28,7 +28,8 @@ app.use(router);
 app.use(Vue3Toasity, {
    autoClose: 1000,
    dangerouslyHTMLString: true,
-   multiple: false,
+   // multiple: false,
+   limit: 2
 });
 
 app.component('font-awesome-icon', FontAwesomeIcon);
