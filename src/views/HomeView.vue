@@ -107,14 +107,14 @@
          flex-direction: column;
          gap: 1em;
          margin-inline: auto;
-         margin-top: clamp(5rem, 12.5vw, 10rem);
-         margin-bottom: clamp(1rem, 22.5vw + -8rem, 10rem);
+         margin-top: clamp(5rem, 4.1667vw + 3rem, 8rem);
+         margin-bottom: clamp(1rem, 8.3333vw + -3rem, 7rem);
          padding-left: 1.5rem;
 
          h1 {
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-size: clamp(1.75rem, 1rem + 3.75vw, 4rem);
+            font-size: clamp(1.75rem, 3.25vw + 1.1rem, 5rem);
             font-weight: 700;
             line-height: 1.15;
 				text-shadow: 3px 4px 7px $color-btn;
