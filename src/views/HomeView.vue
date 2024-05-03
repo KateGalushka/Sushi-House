@@ -1,7 +1,7 @@
 <template>
    <main-master-page>
-      <section class="wrapper">
-         <div class="hero">
+      <section class="hero">
+         <div class="wrapper hero__container">
             <div class="hero__content">
                <transition
                   name="title"
@@ -24,14 +24,18 @@
                   >
                </div>
             </div>
-            <div class="hero__img">
-               <img
-                  src="@/assets/images/home2.webp"
-                  alt="sushi"
-						loading="lazy"
-               />
-            </div>
          </div>
+         <picture class="hero__img">
+            <source
+               media="(max-width: 768px)"
+               srcset="@/assets/images/home-mobile2.webp"
+            />
+            <source srcset="@/assets/images/home2.webp" />
+            <img
+               src="@/assets/images/home2.webp"
+               alt="sushi"
+            />
+         </picture>
       </section>
 
       <section
@@ -81,62 +85,75 @@
    .hero {
       display: flex;
       align-items: center;
-      padding: 1.5rem;
-      gap: 0.5rem;
+      padding: 0.5rem 0 0.5rem 2rem;
+      overflow: clip;
+
+      &__container {
+         flex: 1;
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+      }
       &__img {
-         flex: 1 0 auto;
-         overflow: clip;
-         max-width: 60%;
+         flex: 1;
          img {
             object-fit: cover;
             width: 100%;
          }
       }
       &__content {
+         max-width: toRem(600);
          display: flex;
          flex-direction: column;
          gap: 1em;
+         margin-inline: auto;
+         margin-top: clamp(5rem, 12.5vw, 10rem);
+         margin-bottom: clamp(1rem, 22.5vw + -8rem, 10rem);
+         padding-left: 1.5rem;
 
          h1 {
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-size: clamp(1.25rem, 0.3333rem + 4.5833vw, 4rem);
+            font-size: clamp(1.75rem, 1rem + 3.75vw, 4rem);
             font-weight: 700;
             line-height: 1.15;
+				text-shadow: 3px 4px 7px $color-btn;
+            // text-align: center;
          }
-			p {
-				font-size: 1rem;
-				padding: .5rem 0;
-			}
+         p {
+            font-size: 1rem;
+            padding: 0.5rem 0;
+         }
       }
       &__btns {
          display: flex;
-         gap: 0.75em;
          flex-wrap: wrap;
+         gap: 0.75em;
       }
-      @media (max-width: toRem(1024)) {
-         margin-top: 7.5rem;
-      }
-      // @media (max-width: toRem(640)) {
-      // 	flex-direction: column;
-      // 	justify-content: center;
-      // 	&__content {
-      // 		text-align: center;
-      // 		padding-top: 2rem;
-      // 	}
-      // 	&__btns {
-      // 		margin-inline: auto;
-      // 	}
-      // 	&__img{
-      // 		// transform: rotate(90deg);
-      // 		width: 100%;
-      // 		img {
-      // 			max-height: 250px;
-      // 			object-fit: fill;
-      // 		}
-      // 	}
 
-      // }
+      @media (max-width: toRem(768)) {
+         flex-direction: column;
+         justify-content: center;
+         padding: 1rem;
+         &__content {
+            text-align: center;
+            padding: 0;
+            padding-bottom: 2rem;
+         }
+         &__btns {
+            margin-inline: auto;
+            justify-content: center;
+         }
+         &__img {
+            // border: 1px solid $bg-color1;
+            border-radius: 0.5rem;
+            width: 100%;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            img {
+               border-radius: 0.5rem;
+            }
+         }
+      }
    }
    .map {
       iframe {
