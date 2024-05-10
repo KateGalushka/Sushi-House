@@ -2,13 +2,13 @@
 ---
 
 ## Description
-The project is made in Vue3 Composition API with Firebase - Firestore Database, Storage and Authentication.
+The project is built in Vue3 Composition API along with Firebase for Firestore Database, Storage and Authentication.
 
-You can choose dishes from the menu and different categories, add them to the cart, increase or decrease quantity and submit your order by filling in the form with your data. If you are logged in - your account data (name, email, phone etc.) are completed in the form automatically.
+You can select dishes from the menu and different categories, add them to the cart, increase or decrease quantity and submit your order by filling out a form with your data. If you are logged in - the form is pre-filled with your account details (name, email, phone etc.).
 
-All orders are saved in database with user's contact data, chosen dishes, delivery date and time, payment method.
-The cart is stored in local storage until this order is submitted.
-If the user is authenticated, his account data are saved in database.
+All orders are stored in the database including user contact information, selected dishes, delivery date and time, payment method.
+The cart contents are stored in local storage until this order is submitted.
+If the user is authenticated, his account information is saved in the database.
 
 
 This template should help get you started developing with Vue 3 in Vite.
